@@ -1,0 +1,356 @@
+(apt-get install postgresql-9.1 libpq-dev postgresql-plperl-9.1)
+
+sudo apt-get install postgresql-9.1/-client/-server-dev
+#sudo apt-get install libpgq5  (если сам не установится)
+sudo apt-get install postgresql-9.1-plproxy
+sudo apt-get install skytools
+также ставим memcached
+-----------------------------------------------------------------------------------------
+
+Как создать пользователя в pgsql?
+
+После того как установил postgres server
+
+sudo passwd postgres #меняем пароль для системного пользователя postgres
+su postgres          #заходим под ним
+createuser
+enter name: demo
+is superuser? no, но лучше yes!!! иначе придется вручную выдавать права для языка с
+могёт?    
+yes
+yes
+yes
+psql       #выбрали служебную базу 
+ALTER USER demo password '123';
+
+
+---------------------------------------------------------------------------------------------
+Как установить локаль win1251?
+Файл /var/lib/locales/supported.d/local
+Добавляем в него:
+ru_RU.CP1251 CP1251
+После чего запускаем sudo locale-gen
+если все ок
+su postgres
+/etc/init.d/postgresql initdb -D /usr/local/pgsql/data --locale=ru_RU.UTF-8
+(?) /etc/init.d/postgresql initdb -D /usr/local/pgsql/data --locale=ru_RU.CP1251
+
+--------------------------------------------------------------------------------------------------
+Как создать базу из консоли под этим пользователем?
+
+su postgrees
+psql -U demo -p 5432 -h localhost "postgres"; #postgres - имя служебной базы
+CREATE DATABASE freelance2 WITH ENCODING 'WIN1251' LC_COLLATE='ru_RU.CP1251' LC_CTYPE='ru_RU.CP1251' TEMPLATE=template0;
+CREATE DATABASE freelance_stat WITH ENCODING 'WIN1251' LC_COLLATE='ru_RU.CP1251' LC_CTYPE='ru_RU.CP1251' TEMPLATE=template0;
+CREATE DATABASE freelance_data1 WITH ENCODING 'WIN1251' LC_COLLATE='ru_RU.CP1251' LC_CTYPE='ru_RU.CP1251' TEMPLATE=template0;
+CREATE DATABASE freelance_data2 WITH ENCODING 'WIN1251' LC_COLLATE='ru_RU.CP1251' LC_CTYPE='ru_RU.CP1251' TEMPLATE=template0;
+CREATE DATABASE freelance_proxy WITH ENCODING 'WIN1251' LC_COLLATE='ru_RU.CP1251' LC_CTYPE='ru_RU.CP1251' TEMPLATE=template0;
+
+Переходим на utf-8
+
+CREATE DATABASE freelance2 WITH ENCODING 'UTF8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;
+CREATE DATABASE freelance_stat WITH ENCODING 'UTF8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;
+CREATE DATABASE freelance_data1 WITH ENCODING 'UTF8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;
+CREATE DATABASE freelance_data2 WITH ENCODING 'UTF8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;
+CREATE DATABASE freelance_proxy WITH ENCODING 'UTF8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;
+--------------------------------------------------------------------------------------------------
+Как избежать проблем?
+
+psql -c "SELECT la_joinfuncton();" -d freelance2 -U demo > /home/andrey/storedproc_log.log;
+
+1. В базе сделать язык си вызывающим доверие:
+
+
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d база -U суперюзер
+
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance2 -U demo
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_proxy -U demo
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data1 -U demo
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data2 -U demo
+
+
+
+2. Дать нужному пользователю нужные права:
+
+
+psql -c "GRANT USAGE ON LANGUAGE c TO юзер;" -d база -U суперюзер
+
+psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance2 -U postgres
+psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_proxy -U postgres
+psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_data1 -U postgres
+psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_data2 -U postgres
+
+---------------------------------------------------------------------------------------------------
+Как импортировать данные?
+
+su xwin #!! то есть импортируем все под основным пользователем, не под пользователем postgres !!!! 
+
+/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance2" --verbose "/home/andrey/freelance2.bin"
+/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_stat" --verbose "/home/andrey/freelance_stat.bin"
+/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data1" --verbose "/home/andrey/freelance_data1.bin"
+/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data2" --verbose "/home/andrey/freelance_data2.bin"
+/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_proxy" --verbose "/home/andrey/freelance_proxy.bin"
+
+* После импорта выполняем запросы из файлов D/backup/free-lance.back/functions+pg - а может быть и обойдемся ))
+
+Удалить схемs pgq из баз freelance_proxy freelance2
+
+
+После этого прочитать Установку pgq  и выполнить
+
+Потом сравнить количество таблиц триггеров и функций с бетой (или рабочей версией на другом хосте)
+При разном количестве 
+Для получения списка таблиц в схеме
+select  table_name from information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;
+
+
+Для сравнения функций и хп
+
+SELECT * FROM pg_proc WHERE proname IN ('chat_dialog_read', 'bla-bla-bla'); -- берем функцию с хозяином beta  и developers
+SELECT proname FROM pg_proc WHERE proowner IN(156992, 16390) AND pronamespace = 2200 ORDER BY proname; --pronamespace смотрим в пердыдущем запросе
+
+/* Это надеюсь - устарело навсегда
+
+выполнить для всех созданных баз
+UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'plproxy';
+
+(как ? 
+psql -U demo -p 5432 -h localhost "freelance_proxy"; #postgres - имя нужной базы
+)
+
+
+
+(
+
+
+Для базы proxy скопировать все функции из схем pgq, mail, plproxy
+Проверить содержимое таблиц pgq.queue pgq.consumerпривести к общему знаменателю
+ а точнее, вызываем регистрацию консьюмеров ручками.
+)
+*/
+Также весьма неплохо добавить роль developer:
+CREATE ROLE developers SUPERUSER INHERIT CREATEDB CREATEROLE NOREPLICATION;
+ 
+GRANT developers TO freelance2;
+-- GRANT developers TO alpha;
+ 
+ALTER ROLE demo SET role='developers';
+DROP ROLE sll_alpha;
+--DROP ROLE superdev;
+
+----------------------------------------------------------------------------------------------------
+как сдампить таблицу?
+
+/usr/bin/pg_dump --host dev.free-lance.ru --port 5432 --username "andrey" --format plain --verbose --file "/home/andrey/com" --table "public.commune" "beta"
+
+как сдампить базу&
+/usr/bin/pg_dump --host dev.free-lance.ru --port 5432 --username "andrey" --format custom --blobs --verbose --file "/home/andrey/beta.dump" "beta"
+
+
+/usr/lib/postgresql/9.1/bin/pg_dump --host localhost --port 5432 --username "demo" --format custom --blobs --verbose --file "/home/andrey/freelance2.bin" "freelance2"
+
+/usr/lib/postgresql/9.1/bin/pg_dump --host localhost --port 5432 --username "demo" --format custom --blobs --verbose --file "/home/andrey/freelance_data1.bin" "freelance_data1"
+
+/usr/lib/postgresql/9.1/bin/pg_dump --host localhost --port 5432 --username "demo" --format custom --blobs --verbose --file "/home/andrey/freelance_data2.bin" "freelance_data2"
+
+/usr/lib/postgresql/9.1/bin/pg_dump --host localhost --port 5432 --username "demo" --format custom --blobs --verbose --file "/home/andrey/freelance_stat.bin" "freelance_stat"
+
+/usr/lib/postgresql/9.1/bin/pg_dump --host localhost --port 5432 --username "demo" --format custom --blobs --verbose --file "/home/andrey/freelance_proxy.bin" "freelance_proxy"
+
+
+/usr/bin/pg_dump --host of001.gateap.com --port 6432 --username "cpa" --format custom --blobs --verbose --file "/home/andrey/realmed_cpa.dump" "cpa"
+
+---------------------------------------------------------------------------------------------------
+
+Как расшарить postgre для работы в локальной сети
+
+/etc/postgresql/9.1/main/postgresql.conf
+ правим 'local' на '*'
+
+/etc/postgresql/9.1/main/pg_hba.conf
+host    all    all    192.168.56.1/24	md5
+Если надо с виртуальной читать реальную БД, строка добавляется в файл на реальной машине после 
+host    all             all             127.0.0.1/32            trust
+
+
+Здесь 192.168.56.1 получен из вывода ifconfig на реальной машине:
+
+dizelmachine@dizelmachine-System-Product-Name:/$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 20:cf:30:6c:45:7f  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:41 
+
+lo        Link encap:Локальная петля (Loopback)  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:568851 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:568851 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:84751513 (84.7 MB)  TX bytes:84751513 (84.7 MB)
+
+ppp0      Link encap:Протокол PPP (Point-to-Point Protocol)  
+          inet addr:10.168.121.41  P-t-P:10.64.64.64  Mask:255.255.255.255
+          UP POINTOPOINT RUNNING NOARP MULTICAST  MTU:1500  Metric:1
+          RX packets:92940 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:84857 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:3 
+          RX bytes:109770504 (109.7 MB)  TX bytes:5572863 (5.5 MB)
+
+vboxnet0  Link encap:Ethernet  HWaddr 0a:00:27:00:00:00  
+          inet addr:192.168.56.1  Bcast:192.168.56.255  Mask:255.255.255.0
+          inet6 addr: fe80::800:27ff:fe00:0/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:459 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:86941 (86.9 KB)
+
+На реальной машине при создании соединения ставим порт БД, полученный аналогичным выводом в виртуальной машине
+
+
+---------------------------------------------------------------------------------------------
+Как перезапустить postgres из консоли?
+/sudo/etc/init.d/postgresql restart
+
+
+Как обновить сжатый скрипт на бете  - выполнить http://beta.free-lance.ru/test/static_version.php
+Как обновить java-скрипт   на бете  - выполнить http://beta.free-lance.ru/test/static_version.php;
+
+
+----------------------------------------------------------------------------------------------
+Как на бете отправить в helpdesk вопрос и получить ответ?
+После того как вопрос задан в форме обратной 
+связи https://beta.free-lance.ru/about/feedback/
+ запустить вручную скрипт 
+ 
+http://sb.beta.free-lance.ru/helpdesk/cron/mailpilot.php
+http://sb.free-lance.loc/cron/mailpilot.php
+
+Сама админка, в которой можно ответить
+
+http://sb.beta.free-lance.ru/helpdesk/admin/
+http://sb.free-lance.loc/admin/
+
+=================================iPhone / iPad================================================
+UA браузера Chrome
+
+Mozilla/5.0 (Linux; U; Android-4.0.3; en-us; Galaxy Nexus Build/IML74K) AppleWebKit/535.7 (KHTML, like Gecko) CrMo/16.0.912.75 Mobile Safari/535.7
+Mozilla/5.0 (Linux; U; Android-4.0.3; en-us; Xoom Build/IML77) AppleWebKit/535.7 (KHTML, like Gecko) CrMo/16.0.912.75 Safari/535.7
+Mozilla/5.0 (Linux; Android 4.0.4; SGH-I777 Build/Task650 & Ktoonsez AOKP) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19
+Mozilla/5.0 (Linux; Android 4.1; Galaxy Nexus Build/JRN84D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19
+Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3
+Mozilla/5.0 (iPad; U; CPU OS 5_1_1 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3
+
+
+----------------------------------------------------------------------------------------------
+Как решить проблему с репликой
+
+В обычных ситуациях все POST-запросы идут с токеном, поэтому автоматика работает нормально.
+
+Если же пишется, какой-то особый случай, где токен невозможен, юзер неавторизован, 
+но по сути это ACTION, то необходимо обеспечить выполнение этих условий любым способом. Самое простое будет задать в начале скрипта:
+ 
+define('IS_USER_ACTION', 1);
+----------------------------------------------------------------------------------------------
+Посмотреть лог ошибок за сегодня
+https://beta.free-lance.ru/test/dblog.php?server=master&date=2013-03-05
+http://free-lance.loc/test/dblog.php?server=master&date=2013-05-23
+-----------------------------------------------------------------------------------------------
+Как войти в новый таск?
+http://dev.free-lance.ru/task/public/index.php
+-----------------------------------------------------------------------------------------------
+
+
+2.0
+===============================ПРи хосте на виртуальной машине, как расшарить MySQL=============
+/opt/lampp/bin/nysql --user root
+GRANT ALL PRIVILEGES ON *.* TO andrey@192.168.56.1 IDENTIFIED BY "123";
+после этого можно подключаться через хеди или прочее
+
+===============================ПЕРЕНЕСТИ ВЕБ СЕРВЕР НА ДРУГУЮ МАШИНУ. POSTGRES  и MEMCAHCED оставить на старой================
+Делаем postgres видимым для машин локальной сети
+/etc/postgresql/9.1/main/postgresql.conf
+ правим 'local' на '*'
+
+/etc/postgresql/9.1/main/pg_hba.conf
+host    all    all    192.168.56.1/24	md5
+Если надо с виртуальной читать реальную БД, строка добавляется в файл на реальной машине после 
+host    all             all             127.0.0.1/32            trust
+
+Здесь 192.168.56.1 получен из вывода ifconfig на реальной машине
+----------------------------------------------------------------
+Расшариваем memcached 
+На реальной машине закомментировать в конфиге /etc/memcached.conf
+строку -l 127.0.0.1
+
+Не исключено, надо скопировать на реальную конфиг и заменить в нем строку
+-l 127.0.0.1
+на
+строку -l 192.168.56.1
+Но это по ходу лишнее.
+
+
+Также в процессе ставил мемкеш на виртуалку, после чего снес его, перезагрузился, проверил - работает.
+То, что работает именно мемкеш с реальной машины подтверждается тем, что сессия на виртуальной слетает после рестарта
+реального мемкешсервера.
+----------------------------------------------------------------
+Расшариваем MySQL
+Тупо через pma в доме - привелегии для строки % добавляем root  и ставим крыжики
+
+или
+/opt/lampp/bin/nysql --user root
+GRANT ALL PRIVILEGES ON *.* TO andrey@192.168.56.1 IDENTIFIED BY "123";
+после этого можно подключаться через хеди или прочее
+=====================================Миграция на utf-8=============================================
+httpd.conf
+AddDefaultCharset utf-8
+=========================ФАЙЛ HOSTS ДЛЯ ОСНОВНОЙ МАШИНЫ (ЕСЛИ СЕРВЕР НА ВИРТУАЛЬНОЙ)================
+
+192.168.56.101	test.loc
+192.168.56.101	free-lance.xwn
+#192.168.56.101	alpha.free-lance.loc - не добавил пока
+192.168.56.101	qfisher.loc
+192.168.56.101	dav.free-lance.loc
+
+192.168.56.101	pdadmin
+#127.0.0.1	subdomain.free-lance.loc
+
+192.168.56.101	sb.free-lance.loc
+
+#192.168.56.101 free-lance.loc
+#192.168.56.101 qfisher.loc
+#192.168.56.101	dav.free-lance.loc
+62.213.65.100 alpha.free-lance.ru	#это тоже не помешает
+
+#192.168.56.102fe1.free-lance.loc       #связано с бинд
+
+0.0.0.0	counter.yadro.ru
+0.0.0.0	mc.yandex.ru
+0.0.0.0	www.google-analytics.com
+0.0.0.0	google-analytics.com
+
+
+
+Почему не работает СБР
+
+unoconv 0.4
+ошибки смотреть в odt2pdf.log
+
+
+
+
+======
+POSTGRES + RoR
+#local   all             all                                     peer
+local   all             all                                     trust
+
+
+
+Как найти на сервере freebsd файл содержащий строку
+
+/usr/bin/find /папка -type f -exec grep -H 'строка для поиска' {} \; > ~/searchresults.txt
