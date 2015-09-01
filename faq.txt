@@ -26,6 +26,24 @@ psql       #выбрали служебную базу
 ALTER USER demo password '123';
 
 
+9.3 создание и установка прав
+
+postgres@andrey-LN:/home/andrey$ createuser -U 'postgres' -w '123' -s
+postgres@andrey-LN:/home/andrey$ psql
+psql (9.3.9)
+Type "help" for help.
+
+
+postgres=# CREATE USER andrey;
+CREATE ROLE
+postgres=# ALTER USER andrey password '123';
+ALTER ROLE
+postgres=# ALTER ROLE  andrey WITH superuser;
+ALTER ROLE
+
+
+
+
 ---------------------------------------------------------------------------------------------
 Как установить локаль win1251?
 Файл /var/lib/locales/supported.d/local
