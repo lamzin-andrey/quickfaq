@@ -166,6 +166,11 @@ function alter_column_default_value() {
     -- ALTER TABLE test  ALTER  COLUMN intcol SET DEFAULT 0;
 }
 
+function alter_column_drop_if_exists() {
+    //postgresql
+    -- ALTER TABLE table_name DROP COLUMN IF EXISTS column_name;
+}
+
 function comment_column() {
     //postgresql
     "COMMENT ON COLUMN user_profile.push_notification_messages IS 'Подписка пользователя на Push уведомления 0 - отключено, 1 - каждый день, 2 - каждую неделю';"
