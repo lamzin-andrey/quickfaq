@@ -178,5 +178,5 @@ function comment_column() {
 
 function alter_table_change_primary_key() {
     //ALTER TABLE test ADD CONSTRAINT c_name PRIMARY key (txt,agaga);
-    //ALTER TABLE test DROP CONSTRAINT c_name;
+    //ALTER TABLE test DROP CONSTRAINT IF EXISTS c_name;
 }
