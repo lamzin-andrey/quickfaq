@@ -180,3 +180,8 @@ function alter_table_change_primary_key() {
     //ALTER TABLE test ADD CONSTRAINT c_name PRIMARY key (txt,agaga);
     //ALTER TABLE test DROP CONSTRAINT IF EXISTS c_name;
 }
+
+function alter_table_change_column_type() {
+    //ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
+
+}
