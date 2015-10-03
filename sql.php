@@ -155,6 +155,8 @@ function group_concat (){
 
 function unique_key_example() {
 	ALTER TABLE table ADD CONSTRAINT constr_ID UNIQUE (user_id, subj_id, date, time)
+	//mysl on duplicate
+	ON DUPLICATE KEY UPDATE fieldname = fieldname_or_value
 }
 
 function random_example() {
