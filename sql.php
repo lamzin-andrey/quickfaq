@@ -162,3 +162,28 @@ function unique_key_example() {
 function random_example() {
 	$mysql = 'SELECT * FROM `recipient` ORDER BY RAND() LIMIT 1000';
 }
+
+function alter_column_default_value() {
+    //postgresql
+    -- ALTER TABLE test  ALTER  COLUMN intcol SET DEFAULT 0;
+}
+
+function alter_column_drop_if_exists() {
+    //postgresql
+    -- ALTER TABLE table_name DROP COLUMN IF EXISTS column_name;
+}
+
+function comment_column() {
+    //postgresql
+    "COMMENT ON COLUMN user_profile.push_notification_messages IS 'Подписка пользователя на Push уведомления 0 - отключено, 1 - каждый день, 2 - каждую неделю';"
+}
+
+function alter_table_change_primary_key() {
+    //ALTER TABLE test ADD CONSTRAINT c_name PRIMARY key (txt,agaga);
+    //ALTER TABLE test DROP CONSTRAINT IF EXISTS c_name;
+}
+
+function alter_table_change_column_type() {
+    //ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
+
+}

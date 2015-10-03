@@ -13,15 +13,35 @@ sudo apt-get install skytools
 
 sudo passwd postgres #меняем пароль для системного пользователя postgres
 su postgres          #заходим под ним
-createuser
-enter name: demo
-is superuser? no, но лучше yes!!! иначе придется вручную выдавать права для языка с
-могёт?    
-yes
-yes
-yes
+#9.3
+createuser -U 'andrey' -W '123' -s
+#9.1
+#enter name: demo
+#is superuser? no, но лучше yes!!! иначе придется вручную выдавать права для языка с
+#могёт?    
+#yes
+#yes
+#yes
 psql       #выбрали служебную базу 
 ALTER USER demo password '123';
+
+
+9.3 создание и установка прав
+
+postgres@andrey-LN:/home/andrey$ createuser -U 'postgres' -w '123' -s
+postgres@andrey-LN:/home/andrey$ psql
+psql (9.3.9)
+Type "help" for help.
+
+
+postgres=# CREATE USER andrey;
+CREATE ROLE
+postgres=# ALTER USER andrey password '123';
+ALTER ROLE
+postgres=# ALTER ROLE  andrey WITH superuser;
+ALTER ROLE
+
+
 
 
 ---------------------------------------------------------------------------------------------
