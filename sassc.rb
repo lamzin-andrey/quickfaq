@@ -1,5 +1,5 @@
-module SASSC
-    def AsInstalOnUbuntuAndXAMPP #16-10-2015
+#module SASSC
+    def AsInstalOnUbuntuAndXAMPP #ubuntu 14.04 16-10-2015
        git clone https://github.com/sass/sassc.git
        git clone https://github.com/sass/libsass.git
        cd sassc
@@ -9,4 +9,4 @@ module SASSC
        sudo mv /opt/lampp/lib/libstdc++.so.6 /opt/lampp/lib/libstdc++.so.6.back
        sudo cp -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19 /opt/lampp/lib/libstdc++.so.6
     end
-end
+#end
