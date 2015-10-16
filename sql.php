@@ -176,6 +176,11 @@ function comment_column() {
     "COMMENT ON COLUMN user_profile.push_notification_messages IS 'Подписка пользователя на Push уведомления 0 - отключено, 1 - каждый день, 2 - каждую неделю';"
 }
 
+function comment_table() {
+    //postgresql
+    "COMMENT ON TABLE trate   IS 'comment about';"
+}
+
 function alter_table_change_primary_key() {
     //ALTER TABLE test ADD CONSTRAINT c_name PRIMARY key (txt,agaga);
     //ALTER TABLE test DROP CONSTRAINT IF EXISTS c_name;
