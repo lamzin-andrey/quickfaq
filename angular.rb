@@ -6,6 +6,12 @@ module HelloWorld
     /<p>It work? - {{'Y' + 'e' + 's' + '!'}}</p>
     #Если в открывающемся файле видно надпись It work? - Yes! значит все сделали правильно
   end
+  
+  def hellloBinding
+    #<input ng-model="varname">
+    #<div>{{ varname }}</div>
+    #после этого должно быть все здорово
+  end
 end
 module Controller
   def firstController
@@ -37,6 +43,32 @@ module Controller
     #<ul ng-repeat="user in users">
     #  <li>{{user.name}} </li>
     #</ul>
+  end
+end
+
+#Вся работа с DOM должна быть в директивах
+module Directive
+  def example
+    #существует краткая и полная форма описания директив
+    @see Directive.exShort
+    @see Directive.exLong
+  end
+  def exShort
+    #где-то в html используем нашу директиву ex-short-dir
+    #<div ex-short-dir class="cssClass"></div>
+    angular.module('myAppModule', [])
+      .directive('exShortDir', function() {
+        return function($scope, element, attrs) {
+          #//здесь $scope  - это просто разделяемая с контроллером м представлением область видимости
+          #//здесь element - наш div
+          #//здесь attrs  - атрибуты дива
+          
+          #мы можем наблюдать за значением аттрибута и реагировать на это
+          $scope.watch(attrs.class, function(value) {
+            element.text('value was changed. new value: ' + value);
+          });
+        }
+      });
   end
 end
 
@@ -85,5 +117,22 @@ module AngularAttrNg
     
     #Пусть в контроллере SimpleController переменной $scope добавляется переменная x
     #<div ng-controller="SImpleController"> SimpleController.x = {{ x }}</div>
+  end
+  
+  def click
+    #<div ng-controller="HWController">
+      #<span>x = {{ x }}</span>
+      #<button ng-click="setX5()">Set x = 5</button>
+    #</div>
+    
+    angular.module('app', []).controller(
+      'HWController',
+      function($scope) {
+        $scope.x = 'init value';
+        $scope.setX5 = function() {
+          $scope.x = 5;
+        }
+      }
+    );
   end
 end
