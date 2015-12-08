@@ -70,6 +70,9 @@ module Directive
         }
       });
   end
+  def exLong
+    @see http://habrahabr.ru/post/179755/
+  end
 end
 
 module Angular
