@@ -89,6 +89,22 @@ module Angular
     $rootScope
     @see Angular.scope
   end
+  
+  class http
+    #$http
+    def get(sUrl)
+      @return Promise
+    end
+  end
+  
+  class Promise
+    def success(callback)
+      #callback(JSONdata)
+    end
+    def error(callback)
+      #callback(responseText, responseStatus, fn)
+    end
+  end
 end
 
 #Здесь перечислены атрибуты, которые начинаются с ng-
