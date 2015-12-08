@@ -23,5 +23,35 @@ module jasmine
     def toBe(expectedValue)
       #it(phrase, callback)
     end
+    def beforeEach(callback)
+      #в решении может быть несколько it и может понадобиться, 
+      #чтобы перед вызовом каждого из них какие-то переменные имели какие-то
+      #значения.
+      #эту инициализацию можно вынести в callback beforeEach
+      #callback afterEach можно использовать для сброса значений
+      
+      describe('Разбираемся с before / after Each',
+		function () {
+		  var x = 0;
+		  beforeEach(function(){
+		    x++;
+		  });
+		  
+		  afterEach(function(){
+		    x = 0;
+		  });
+		  it ('ждем что икс равен 1', function(){
+		    expect(x).toBe(1);
+		  });
+		  
+		  it ('снова ждем что икс равен 1', function(){
+		    expect(x).toBe(1);
+		  });
+		}
+      );
+    end
+    def afterEach
+	  @see beforeEach
+    end
   end
 end
