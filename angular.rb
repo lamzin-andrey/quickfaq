@@ -155,3 +155,16 @@ module AngularAttrNg
     );
   end
 end
+
+module SPA
+  #ng-view, $routeProvider, config(), 
+  def example
+    ngApp.config(
+      function($routeProvider) {
+        $routeProvider
+          .when('/', {templateUrl: 'root.html', controller:rootController})
+          .when('/game', {templateUrl: 'game.html', controller:gameController});
+      }
+    );
+  end
+end
