@@ -28,3 +28,13 @@ function datetime(rus) {
 	}
 	return sDate;
 }
+/**
+ * @description Устанавливает маску ввода на текстовое поле ввода 
+ * @param {Event} e onkeydown
+*/
+function inputMask (e) {
+	var allow = "1234567890,-", codes = {8:1,37:1, 39:1, 16:1, 46:1, 36:1, 35:1};
+	if ( !~allow.indexOf(e.key) && !codes[e.keyCode]) {
+		e.preventDefault();
+	}
+}
