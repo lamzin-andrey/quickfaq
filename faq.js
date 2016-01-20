@@ -38,3 +38,24 @@ function inputMask (e) {
 		e.preventDefault();
 	}
 }
+function getCaretPosition(input) {
+	/*var pos = 0;
+	// IE < 9 Support
+	if (document.selection) {
+		return input.selectionStart;
+		if (input.value.length == 0) return 0;
+		input.focus();
+		var sel = document.selection.createRange();
+		var clone  = sel.duplicate();
+		sel.collapse(true);
+		clone.moveToElementText(input);
+		clone.setEndPoint('EndToEnd', sel);
+		return (clone.text.length);
+	}
+	// Firefox support
+	else if (input.selectionStart || input.selectionStart == '0'){
+		pos = input.selectionStart;
+	}
+	return pos;*/
+	return input.selectionStart;
+}
