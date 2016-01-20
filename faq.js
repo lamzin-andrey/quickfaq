@@ -33,8 +33,25 @@ function datetime(rus) {
  * @param {Event} e onkeydown
 */
 function inputMask (e) {
+	//FF
 	var allow = "1234567890,-", codes = {8:1,37:1, 39:1, 16:1, 46:1, 36:1, 35:1};
 	if ( !~allow.indexOf(e.key) && !codes[e.keyCode]) {
+		e.preventDefault();
+	}
+	
+	//cross
+	//allow codes: 0123456789-, arrowR, arrowL, home , end, shift, delete, backspace
+	var codes = {8:1,37:1, 39:1, 16:1, 46:1, 36:1, 35:1, 109:1, 188:1, 191:1, 108:1},
+		i,
+		//,-
+		o2 = {109:1, 189:1, 188:1, 191:1, 108:1};
+	for (i = 96; i < 105; i++) {
+		codes[i] = 1;
+	}
+	for (i = 48; i < 58; i++) {
+		codes[i] = 1;
+	}
+	if (!codes[e.keyCode] || (e.keyCode == 191 && !e.shiftKey) ) {
 		e.preventDefault();
 	}
 }
