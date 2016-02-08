@@ -29,8 +29,12 @@ module Console
     #table_name: migration_versions
     #name: Application Migrations
   
+		## Это создаст каталог s3.loc/www/app/DoctrineMigrations/
     #php app/console doctrine:migrations:status --show-versions
-    #php app/console doctrine:migrations:migrate 20151202122751
+		## Это создаст файл миграции в s3.loc/www/app/DoctrineMigrations/
+    #php app/console doctrine:migrations:generate
+		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой php app/console doctrine:migrations:status --show-versions
+    #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
   end
 end
 
@@ -88,4 +92,60 @@ module Test
 	  $ phpunit -c app src/Acme/DemoBundle/
     end
   end
+end
+
+module Migration
+	def addSql
+		#$this->addSql("NATIVE SQL QUERY");
+	end
+end
+
+module Entity
+	class Datetime
+		def created_at
+			#Для работы с датой и временем сущности в Doctrine используй поля created_at
+			# updated_at
+			#
+			/** @Column(type="datetime") */
+			private $updated_at;
+			private $created_at;
+			
+			#Для использования надо подключить
+			#use Doctrine\ORM\Event\PreUpdateEventArgs;
+			#use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+			#use Doctrine\ORM\Mapping\PrePersist;
+			#use Doctrine\ORM\Mapping\PreUpdate;
+			
+			#Для автоматического заполнения этих полей надо определить в классе сущности
+			/**
+			 * Set date create
+			 * @PrePersist
+			 */
+			#public function initCreatedAt()
+			#{
+			#	//$this->updated_at = $this->created_at = date('Y-m-d H:i:s');
+			#	$this->updated = new \DateTime("now");	
+			#}
+			/**
+			 * Set date modify
+			 * @PreUpdate
+			 */
+			#public function preUpdate(PreUpdateEventArgs $event)
+			#{
+			#	if ($event->hasChangedField('body')) {
+			#		$this->updated_at = date('Y-m-d H:i:s');
+			#	}
+			#}
+			
+		end
+		def updated_at
+			@see created_at
+		end
+	end
+end
+
+module Doctrine2
+	def Datetime
+		@see Entity.Datetime.created_at
+	end
 end

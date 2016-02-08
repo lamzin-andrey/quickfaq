@@ -7,23 +7,23 @@ function unixtime() {
  * @return Количество секунд с 01.01.1970 до sDatetime
 */
 function time(sDatetime) {
-	//sDatetime = sDatetime ? sDatetime : '';
 	var re = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}$/, arr = sDatetime.split(' '),
 		sDate = arr[0],
-		sTime = arr[1], d = new Date();
-	if (!re.test(sDatetime)) {
-		return unixtime(); //@see this faq
+		sTime = arr[1], d = new Date(),
+		re2 = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/;
+	if (!re.test(sDatetime) && !re2.test(sDatetime)) {
+		return unixtime();//@see this faq
 	}
 	arr = sDate.split('-');
-	d.setDate(parseInt(sDate[2], 10));
-	d.setFullYear(sDate[0]);
-	d.setMonth(parseInt(sDate[1], 10) - 1);
+	d.setDate(parseInt(arr[2], 10));
+	d.setFullYear(arr[0]);
+	d.setMonth(parseInt(arr[1], 10) - 1);
 	
 	if (sTime) {
 		arr = sTime.split(':');
-		d.setHours(parseInt(sTime[0], 10));
-		d.setMinutes(parseInt(sTime[1], 10));
-		d.setSeconds(parseInt(sTime[1], 10), 0);
+		d.setHours(parseInt(arr[0], 10));
+		d.setMinutes(parseInt(arr[1], 10));
+		d.setSeconds(parseInt(arr[2], 10), 0);
 	} else {
 		d.setHours(0);
 		d.setMinutes(0);

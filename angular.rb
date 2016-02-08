@@ -73,6 +73,22 @@ module Directive
   def exLong
     @see http://habrahabr.ru/post/179755/
   end
+  class JQPlugin2Dir
+    def plugin
+		#Пусть есть плагин, который в простом JS приложении используется так:
+		#html <div id="F"></div>
+		$('#F').make(data); #и контейнер с id="F" стал например диаграммой отображающей data
+		#вместо этого делаем
+		/angular.module('helloDirective', []).directive('make', function () {
+		  return {
+			restrict: 'A', # или 'E' если ты хочешь использовать вместо стандартного html тега <make><\/make>
+			link: function ($scope, $elem, attrs) {
+				$elem.make(data);
+			}
+		  }
+		});/
+    end
+  end
 end
 
 module Angular
@@ -167,4 +183,10 @@ module SPA
       }
     );
   end
+end
+
+module JQPlugin2Dir
+	def JQPlugin2Dir
+		@see Directive.JQPlugin2Dir.plugin
+	end
 end
