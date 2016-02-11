@@ -5,6 +5,16 @@ module HelloWorld
     #Сразу замечаем, что становится доступен такой прием
     /<p>It work? - {{'Y' + 'e' + 's' + '!'}}</p>
     #Если в открывающемся файле видно надпись It work? - Yes! значит все сделали правильно
+    
+    #Для Symfony при использовании twig
+    #html
+    /<p ng-app="appName">It work? - [['Y' + 'e' + 's' + '!']]</p>
+    #js
+    var appName = angular.module('appName', [])
+	.config(function ($interpolateProvider) {
+		$interpolateProvider.startSymbol('[[');
+		$interpolateProvider.endSymbol(']]');
+	})
   end
   
   def hellloBinding

@@ -45,6 +45,12 @@ module Configuration
 end
 
 module Controller
+  def action
+	#/**
+    # * @Route("/comments", name="study_app_comments_add", requirements={ "_method" : "POST" })
+    # * @Template("StudyAppCommentBundle:Default:index.html.twig")
+    #*/
+  end
   def orm
     #write 
     #$em = $this->getDoctrine()->getEntityManager();
@@ -56,7 +62,7 @@ module Controller
   end
   
   def request
-    #$request = $this->getRequest();
+    #$request = $this->getRequest()->request;
     # ->has(); (?) -> get(); (?)  -> set(); (?)
     #$attr = $request->attributes
     # ->has();  -> get();   -> set(); (?)
@@ -76,6 +82,24 @@ module Controller
 	#$request->attributes->has(SecurityContext::AUTHENTICATION_ERROR);
 	#$error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
 
+  end
+  
+  class Response
+    def json
+		use Symfony\Component\HttpFoundation\Response;
+        /**
+		 * json response
+		*/
+		private function _json($data) 
+		{
+			$data = json_encode($data);
+			$response = new Response($data);
+			$response->headers->set("Content-Type", "application/json");
+			return $response;
+		}
+		# и возвращаем в контроллере
+		return $this->_json(array('list' => $data));
+    end
   end
 end
 
@@ -147,5 +171,31 @@ end
 module Doctrine2
 	def Datetime
 		@see Entity.Datetime.created_at
+	end
+end
+
+module REST
+  class methodPOST
+	def annotation
+      @see Controller.action
+    end
+  end
+end
+module NativeSqlQuery
+	def exampleInController
+		use Doctrine\ORM\Query\ResultSetMapping;
+		#....
+		$rsm = new ResultSetMapping();
+		$rsm->addEntityResult('SkyengTT\SkyengTTBundle\Entity\Vocabulary', 'v');
+		$rsm->addFieldResult('v', 'id', 'id');
+		$rsm->addFieldResult('v', 'eng_word', 'eng_word');
+		$rsm->addFieldResult('v', 'rus_word', 'rus_word');
+		$rsm->addFieldResult('v', 'answer_id', 'answer_id');
+	
+		$doctrine = $this->getDoctrine();
+	
+		$answerResult = $doctrine->getEntityManager()->createNativeQuery(
+            "SELECT v.id, v.eng_word, v.rus_word, v.answer_id FROM vocabulary AS v WHERE id != {$questionId} ORDER BY RANDOM() LIMIT 4", $rsm)
+            ->getResult();
 	end
 end
