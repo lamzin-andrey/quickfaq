@@ -62,6 +62,9 @@ module Directive
     #существует краткая и полная форма описания директив
     @see Directive.exShort
     @see Directive.exLong
+    #Директивы можно определять в отдельном файла, см. как сделано в JQPlugin2Dir.plugin
+    #после этого в определении приложения пишем так:
+    angular.module('myApp', ['helloDirective'])
   end
   def exShort
     #где-то в html используем нашу директиву ex-short-dir
@@ -114,6 +117,21 @@ module Angular
   def rootScope
     $rootScope
     @see Angular.scope
+  end
+  
+  def factory
+	angular.module('appName', ['appDirectives'])
+		/** @param  String serviceName имя сервиса */
+		/** @param  Array params 
+					сначала перечисляются имена используемых сервисов или компонентову
+					потом следует определение сервиса (функция)
+		 */
+		.factory('Places', ['$http', '$rootScope', function($http, $rootScope) {
+			/** Тут на самом деле все основное, функции, пееременные и т п.  */
+			var service = {};
+			/** и возвращаем все что мы наопределяли */
+			return service;
+		}]);
   end
   
   class http
@@ -194,7 +212,9 @@ module SPA
     );
   end
 end
-
+module Service
+	@see angular.factory
+end
 module JQPlugin2Dir
 	def JQPlugin2Dir
 		@see Directive.JQPlugin2Dir.plugin
