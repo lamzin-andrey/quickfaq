@@ -84,7 +84,13 @@ module Directive
       });
   end
   def exLong
-    @see http://habrahabr.ru/post/179755/
+    .directive('exLongDir', function() {
+		return {
+			restrict : 'A', # или 'E' если ты хочешь использовать вместо стандартного html тега <myTag></myTag>
+			link : F # F - это функция, возвращаемая exShort
+		}
+      });
+    @see для большего http://habrahabr.ru/post/179755/
   end
   class JQPlugin2Dir
     def plugin
@@ -105,6 +111,27 @@ module Directive
 end
 
 module Angular
+  class Mmodule
+	#на самом деле просто module
+	def example
+	  angular.module('myAppDirectives', []);#Создали модуль директив приложения, удобно, когда лирективы вынесены в отдельный файл
+	  var app = angular.module('myApp', ['myAppDirectives']);#Создали ангуляр - приложение
+	end	
+	#ниже доступные методы объекта app
+	
+	def value(name, value)
+	  var app = angular('myApp', [])
+		.value('myValue', 524)
+	  #доступ в контроллере
+	  .controller('myController', function(myValue){
+		#myValue доступно тут повсюду
+	  });
+	end
+	
+	def controller
+		@see Controller
+	end
+  end
   def scope
     $scope
     #В AngularJS $scope и $rootScope – это ключевые сущности для передачи данных между
