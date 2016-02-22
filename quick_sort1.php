@@ -9,7 +9,7 @@ function qs(&$data, $left = 0, $right = null) {
 	}
 	$i = $left;
 	$j = $right;
-	$t = $data[ round( $i + $j ) / 2 ];
+	$t = $data[ round( $i + $j  / 2) ];
 	do {
 		while ($data[$i] < $t) $i++;
 		while ($data[$j] > $t) $j--;
