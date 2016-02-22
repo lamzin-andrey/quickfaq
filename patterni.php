@@ -81,4 +81,12 @@
 	 
 	 
  }
+ /**
+  * @see DependencyInjection
+ */
+ function IoC(){}
+ /**
+  * @see DependencyInjection
+ */
+ function InversionOfControl(){}
 ?>
