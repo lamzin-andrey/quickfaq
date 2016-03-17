@@ -1,4 +1,7 @@
 <?
+function change_root_password() {
+	"mysqladmin -u root -p password '123456' ";
+}
 function shared_db_for_user() {
 	//GRANT ALL PRIVILEGES ON *.* TO 'root'@'95.153.132.132' IDENTIFIED BY '*******';
 	
