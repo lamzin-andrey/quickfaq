@@ -29,8 +29,12 @@ module Console
     #table_name: migration_versions
     #name: Application Migrations
   
+		## Это создаст каталог s3.loc/www/app/DoctrineMigrations/
     #php app/console doctrine:migrations:status --show-versions
-    #php app/console doctrine:migrations:migrate 20151202122751
+		## Это создаст файл миграции в s3.loc/www/app/DoctrineMigrations/
+    #php app/console doctrine:migrations:generate
+		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой php app/console doctrine:migrations:status --show-versions
+    #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
   end
 end
 
@@ -41,6 +45,12 @@ module Configuration
 end
 
 module Controller
+  def action
+	#/**
+    # * @Route("/comments", name="study_app_comments_add", requirements={ "_method" : "POST" })
+    # * @Template("StudyAppCommentBundle:Default:index.html.twig")
+    #*/
+  end
   def orm
     #write 
     #$em = $this->getDoctrine()->getEntityManager();
@@ -52,7 +62,7 @@ module Controller
   end
   
   def request
-    #$request = $this->getRequest();
+    #$request = $this->getRequest()->request;
     # ->has(); (?) -> get(); (?)  -> set(); (?)
     #$attr = $request->attributes
     # ->has();  -> get();   -> set(); (?)
@@ -73,4 +83,119 @@ module Controller
 	#$error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
 
   end
+  
+  class Response
+    def json
+		use Symfony\Component\HttpFoundation\Response;
+        /**
+		 * json response
+		*/
+		private function _json($data) 
+		{
+			$data = json_encode($data);
+			$response = new Response($data);
+			$response->headers->set("Content-Type", "application/json");
+			return $response;
+		}
+		# и возвращаем в контроллере
+		return $this->_json(array('list' => $data));
+    end
+  end
+end
+
+module Test
+  class Console
+    def run
+      # run all tests in the Utility directory
+      $ phpunit -c app src/Acme/DemoBundle/Tests/Utility/
+
+      # run tests for the Calculator class
+	  $ phpunit -c app src/Acme/DemoBundle/Tests/Utility/CalculatorTest.php
+
+	  # запустить все тесты для целого Bundle
+	  $ phpunit -c app src/Acme/DemoBundle/
+    end
+  end
+end
+
+module Migration
+	def addSql
+		#$this->addSql("NATIVE SQL QUERY");
+	end
+end
+
+module Entity
+	class Datetime
+		def created_at
+			#Для работы с датой и временем сущности в Doctrine используй поля created_at
+			# updated_at
+			#
+			/** @Column(type="datetime") */
+			private $updated_at;
+			private $created_at;
+			
+			#Для использования надо подключить
+			#use Doctrine\ORM\Event\PreUpdateEventArgs;
+			#use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+			#use Doctrine\ORM\Mapping\PrePersist;
+			#use Doctrine\ORM\Mapping\PreUpdate;
+			
+			#Для автоматического заполнения этих полей надо определить в классе сущности
+			/**
+			 * Set date create
+			 * @PrePersist
+			 */
+			#public function initCreatedAt()
+			#{
+			#	//$this->updated_at = $this->created_at = date('Y-m-d H:i:s');
+			#	$this->updated = new \DateTime("now");	
+			#}
+			/**
+			 * Set date modify
+			 * @PreUpdate
+			 */
+			#public function preUpdate(PreUpdateEventArgs $event)
+			#{
+			#	if ($event->hasChangedField('body')) {
+			#		$this->updated_at = date('Y-m-d H:i:s');
+			#	}
+			#}
+			
+		end
+		def updated_at
+			@see created_at
+		end
+	end
+end
+
+module Doctrine2
+	def Datetime
+		@see Entity.Datetime.created_at
+	end
+end
+
+module REST
+  class methodPOST
+	def annotation
+      @see Controller.action
+    end
+  end
+end
+module NativeSqlQuery
+	def exampleInController
+		use Doctrine\ORM\Query\ResultSetMapping;
+		#....
+		$rsm = new ResultSetMapping();
+		$rsm->addEntityResult('SkyengTT\SkyengTTBundle\Entity\Vocabulary', 'v');
+		$rsm->addFieldResult('v', 'id', 'id');
+		$rsm->addFieldResult('v', 'eng_word', 'eng_word');
+		$rsm->addFieldResult('v', 'rus_word', 'rus_word');
+		$rsm->addFieldResult('v', 'answer_id', 'answer_id');
+	
+		$doctrine = $this->getDoctrine();
+	
+		$answerResult = $doctrine->getEntityManager()->createNativeQuery(
+            "SELECT v.id, v.eng_word, v.rus_word, v.answer_id FROM vocabulary AS v WHERE id != {$questionId} ORDER BY RANDOM() LIMIT 4", $rsm)
+            ->getResult();
+	end
 end

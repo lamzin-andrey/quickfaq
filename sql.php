@@ -1,4 +1,11 @@
 <?
+function shared_db_for_user() {
+	//GRANT ALL PRIVILEGES ON *.* TO 'root'@'95.153.132.132' IDENTIFIED BY '*******';
+	
+	//close access
+	//DELETE FROM user WHERE Host = '95.153.132.132';
+	//FLUSH PRIVILEGES;
+}
 //!!
 function foreign_key() {
 	//mysql
