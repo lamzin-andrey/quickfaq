@@ -60,6 +60,21 @@ function datetime(rus) {
 	return sDate;
 }
 /**
+ * @description Индексирует массив по указанному полю
+ * @param {Array} data
+ * @param {String} id
+*/
+function indexBy(data, id) {
+	var i = 0, r = {};
+	$(data).each(function(i, j){
+		if (j && j[id]) {
+			r[j[id]] = j;
+		}
+	});
+	return j;
+}
+
+/**
  * @description Устанавливает маску ввода на текстовое поле ввода 
  * @param {Event} e onkeydown
 */

@@ -9,6 +9,42 @@ module Console
 	end
 end
 
+module PrepareConsole
+	class Migration
+		#Пример создания внешних ключей
+		def up
+			$keys = [];
+			$keys[] = ['constraint' => 'fk_clients', 'key' => 'clients_id', 
+				'reference'	=> [
+					'table'	=> 'clients',
+					'column'	=> 'id',
+				],
+				'on_update'	=> 'no action',
+				'on_delete'	=> 'no action'
+			];
+			$keys[] = ['constraint' => 'fk_agregate_users', 'key' => 'agregate_users_id', 
+				'reference'	=> [
+					'table'	=> 'agregate_users',
+					'column'	=> 'id',
+				],
+				'on_update'	=> 'no action',
+				'on_delete'	=> 'no action'
+			];
+			
+			\DBUtil::create_table('web_users', array(
+				'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
+				'clients_id' => array('constraint' => 11, 'type' => 'int', 'unsigned' => true),
+				'agregate_users_id' => array('constraint' => 11, 'type' => 'int', 'comment' => 'Числовой идентификатор локального агрегатора', 'unsigned' => true),
+				'email' => array('constraint' => 96, 'type' => 'varchar'),
+				'password' => array('constraint' => 255, 'type' => 'varchar'),
+				'phone' => array('type' => 'bigint'),
+				'is_verify' => array('constraint' => 1, 'type' => 'tinyint', 'default' => 0)
+
+			), array('id'), true, false, null, $keys);
+		end
+	end
+end
+
 module Www
 	class Model
 		def find(id)
