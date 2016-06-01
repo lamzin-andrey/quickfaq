@@ -186,6 +186,8 @@ function alter_column_drop_if_exists() {
 function comment_column() {
     //postgresql
     "COMMENT ON COLUMN user_profile.push_notification_messages IS 'Подписка пользователя на Push уведомления 0 - отключено, 1 - каждый день, 2 - каждую неделю';"
+    //mysql
+    ALTER TABLE  `users` CHANGE  `agregate_percent`  `agregate_percent`int(3) COMMENT 'процент комиссии, которую взымает агрегатор с магазина';
 }
 
 function comment_table() {
