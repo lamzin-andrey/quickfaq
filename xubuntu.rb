@@ -45,4 +45,13 @@ module Xubuntu
 
         end
     end
+    
+    class FlashPlayer
+		def inslall
+			sudo dpkg --add-architecture i386
+			sudo apt-get update
+			sudo apt-get install xvfb libcurl3:i386 libglib2.0-0:i386 libx11-6:i386 libxext6:i386 libxt6:i386 libxcursor1:i386 libnss3:i386 libgtk2.0-0:i386
+			download from adobe flashplayer
+		end
+    end
 end
