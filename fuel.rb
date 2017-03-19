@@ -80,4 +80,30 @@ module Www
 			),*/
 		end
 	end
+	
+	class Validate
+	    def usage
+			$oValidation = Model_X::validate('uniquekey');
+			if ($oValidation->run($aData)) {#aData  массив с полями как в модели
+				$oX->set($oValidation->validated());
+				$oX->save();
+			}
+	    end
+	    
+	    def exampleValidateInModel
+			#class Model_X
+			public static function validate($factory)
+			{
+				$val = Validation::forge($factory);
+				$val->add_callable('myvalidation');
+				$val->add_field('title', 'Тайтл', 'trim|strip_tags|max_length[255]');
+				$val->add_field('description', 'META тег description', 'trim|strip_tags|max_length[255]');
+				$val->add_field('keywords', 'META тег keywords', 'trim|strip_tags|max_length[255]');
+				$val->add_field('heading', 'Заголовок SEO текста', 'trim|strip_tags|max_length[255]');
+				$val->add_field('body', 'SEO текст', 'trim|strip_tags|max_length[255]');
+				$val->add_field('user_id', '', 'trim|intval');
+				return $val;
+			}
+	    end
+	end
 end

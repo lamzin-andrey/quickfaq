@@ -160,4 +160,10 @@ module Xubuntu
 		HandleLidSwitch=ignore
 
 	end
+	class Date
+		def setMsk
+			sudo dpkg-reconfigure tzdata
+			#date --set='2017-03-19 12:12:12.0000'
+		end
+	end
 end

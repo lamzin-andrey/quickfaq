@@ -122,3 +122,120 @@ function getCaretPosition(input) {
 	return pos;*/
 	return input.selectionStart;
 }
+
+
+//=================AJAX HELPERS=========================================
+	function  _map(data, read) {
+		var $obj, obj, i;
+		for (i in data) {
+			$obj = $('#' + i);
+			obj = $obj[0];
+			if (obj) {
+				if (obj.tagName == 'INPUT' || obj.tagName == 'TEXTAREA') {
+					if (!read) {
+						$obj.val(data[i]);
+					} else {
+						data[i] = $obj.val();
+					}
+				} else {
+					if (!read) {
+						$obj.text(data[i]);
+					} else {
+						data[i] = $obj.text();
+					}
+				}
+			}
+		}
+	}
+	function _get(onSuccess, url, onFail) {
+		Lib._get(onSuccess, url, onFail);
+	}
+	function _delete(onSuccess, url, onFail) {
+		_restreq('post', {}, onSuccess, url, onFail)
+	}
+	function _post(data, onSuccess, url, onFail) {
+		var list = document.getElementsByTagName('meta'), i, t;
+		for (i = 0; i < list.length; i++) {
+			if ($(list[i]).attr('name') == 'app') {
+				t = $(list[i]).attr('content');
+				break;
+			}
+		}
+		if (t) {
+			data._token = t;
+			_restreq('post', data, onSuccess, url, onFail)
+		}
+	}
+	function _patch(data, onSuccess, url, onFail) {
+		_restreq('patch', data, onSuccess, url, onFail)
+	}
+	function _put(data, onSuccess, url, onFail) {
+		_restreq('put', data, onSuccess, url, onFail)
+	}
+	function _restreq(method, data, onSuccess, url, onFail) {
+		$('#preloader').show();
+		$('#preloader').width(screen.width);
+		$('#preloader').height(screen.height);
+		$('#preloader div').css('margin-top', Math.round((screen.height - 350) / 2) + 'px');
+		
+		if (!url) {
+			url = window.location.href;
+		}
+		if (!onFail) {
+			onFail = defaultFail;
+		}
+		switch (method) {
+			case 'put':
+			case 'patch':
+			case 'delete':
+				break;
+		}
+		$.ajax({
+			method: method,
+			data:data,
+			url:url,
+			dataType:'json',
+			success:onSuccess,
+			error:onFail
+		});
+	}
+	
+	function defaultFail(data) {
+		window.requestSended = 0;
+		alert(__('messages.Default_fail'));
+	}
+
+
+/**
+ * @description Индексирует массив по указанному полю
+ * @param {Array} data
+ * @param {String} id = 'id'
+ * @return {Object};
+*/
+function storage(key, data) {
+	var L = window.localStorage;
+	if (L) {
+		if (data === null) {
+			L.removeItem(key);
+		}
+		if (!(data instanceof String)) {
+			data = JSON.stringify(data);
+		}
+		if (!data) {
+			data = L.getItem(key);
+			if (data) {
+				try {
+					data = JSON.parse(data);
+				} catch(e){;}
+			}
+		} else {
+			L.setItem(key, data);
+		}
+	}
+	return data;
+}
+function onBackButton() {
+	$(window).bind('popstate', function() {
+		setScopesCategoriesLevelByParentId(true);
+	});
+}

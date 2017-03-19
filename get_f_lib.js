@@ -136,3 +136,87 @@ var OfflineTools = {
 		}
 	}
 };
+
+
+var RestAjax = {
+	//=================AJAX HELPERS=========================================
+	 _map: function (data, read) {
+		var $obj, obj, i;
+		for (i in data) {
+			$obj = $('#' + i);
+			obj = $obj[0];
+			if (obj) {
+				if (obj.tagName == 'INPUT' || obj.tagName == 'TEXTAREA') {
+					if (!read) {
+						$obj.val(data[i]);
+					} else {
+						data[i] = $obj.val();
+					}
+				} else {
+					if (!read) {
+						$obj.text(data[i]);
+					} else {
+						data[i] = $obj.text();
+					}
+				}
+			}
+		}
+	}
+	_get:function (onSuccess, url, onFail) {
+		Lib._get(onSuccess, url, onFail);
+	}
+	_delete: function (onSuccess, url, onFail) {
+		_restreq('post', {}, onSuccess, url, onFail)
+	}
+	 _post: function(data, onSuccess, url, onFail) {
+		var list = document.getElementsByTagName('meta'), i, t;
+		for (i = 0; i < list.length; i++) {
+			if ($(list[i]).attr('name') == 'app') {
+				t = $(list[i]).attr('content');
+				break;
+			}
+		}
+		if (t) {
+			data._token = t;
+			_restreq('post', data, onSuccess, url, onFail)
+		}
+	}
+	_patch:function(data, onSuccess, url, onFail) {
+		_restreq('patch', data, onSuccess, url, onFail)
+	}
+	_put:function(data, onSuccess, url, onFail) {
+		_restreq('put', data, onSuccess, url, onFail)
+	}
+	_restreq:function(method, data, onSuccess, url, onFail) {
+		$('#preloader').show();
+		$('#preloader').width(screen.width);
+		$('#preloader').height(screen.height);
+		$('#preloader div').css('margin-top', Math.round((screen.height - 350) / 2) + 'px');
+		
+		if (!url) {
+			url = window.location.href;
+		}
+		if (!onFail) {
+			onFail = defaultFail;
+		}
+		switch (method) {
+			case 'put':
+			case 'patch':
+			case 'delete':
+				break;
+		}
+		$.ajax({
+			method: method,
+			data:data,
+			url:url,
+			dataType:'json',
+			success:onSuccess,
+			error:onFail
+		});
+	}
+	
+	defaultFail:function(data) {
+		window.requestSended = 0;
+		alert(__('messages.Default_fail'));
+	}
+};
