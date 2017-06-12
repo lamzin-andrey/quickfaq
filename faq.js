@@ -7,12 +7,12 @@ function unixtime() {
  * @return Количество секунд с 01.01.1970 до sDatetime
 */
 function time(sDatetime) {
-	var re = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}$/, arr = sDatetime.split(' '),
+	var re = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}\s[0-9]{2}:[0-9]{2}:[0-9]{2}$/, arr = String(sDatetime).split(' '),
 		sDate = arr[0],
 		sTime = arr[1], d = new Date(),
 		re2 = /^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/;
 	if (!re.test(sDatetime) && !re2.test(sDatetime)) {
-		return unixtime();//@see this faq
+		return parseInt(new Date().getTime()/1000);
 	}
 	arr = sDate.split('-');
 	d.setDate(parseInt(arr[2], 10));
@@ -371,6 +371,22 @@ function storage(key, data) {
 		}
 	}
 	return data;
+}
+/**
+ * @description clear all storage elements with prefix key
+*/
+function clearStorageByPrefix(key) {
+	var i, sz = localStorage.length, arr = [], str;
+	for (i = 0; i < sz; i++) {
+		str = localStorage.key(i);
+		console.log(str);
+		if (~str.indexOf(key)) {
+			arr.push(str);
+		}
+	}
+	for (i = 0; i < arr.length; i++) {
+		localStorage.removeItem(arr[i]);
+	}
 }
 function onBackButton() {
 	$(window).bind('popstate', function() {

@@ -54,8 +54,29 @@ module Www
 		def find(id)
 			
 		end
-		def find('all', ['where' => [ ['field', '=><', value] ] )
-			
+		def find('all', ['where' => [ ['field', '=><', value]] ] )
+			# owner = N AND push_allow = 1 AND (push_token <> '' OR platform = 'AndroidV4')
+			aClientOwner = Model_Client::find('all', array(
+                    'where' => array(
+                        array('owner', '=', $oAgregator->owner),
+                        array('push_allow', '=', 1),
+                        array(
+							array('push_token', '<>', ''),
+							'or' =>array('platform', '=', 'AndroidV4')
+						),
+                    ),
+                ));
+            # select only some fields
+            aClientOwner = Model_Client::find('all', array(
+                    'where' => array(/** .. */),
+                    'select' => ['id', 'name']
+                ));
+            # no use previous cache (No make cache now????....)
+            aClientOwner = Model_Client::find('all', array(
+                    'where' => array(/** .. */),
+                    'select' => ['id', 'name'],
+                    `cache` => false
+                ));
 		end
 	end
 	class Observer_Custom
@@ -83,11 +104,11 @@ module Www
 	
 	class Validate
 	    def usage
-			$oValidation = Model_X::validate('uniquekey');
-			if ($oValidation->run($aData)) {#aData  массив с полями как в модели
+			#$oValidation = Model_X::validate('uniquekey');
+			#if ($oValidation->run($aData)) {#aData  массив с полями как в модели
 				$oX->set($oValidation->validated());
 				$oX->save();
-			}
+			#}
 	    end
 	    
 	    def exampleValidateInModel
@@ -105,5 +126,11 @@ module Www
 				return $val;
 			}
 	    end
+	end
+	class Cahce end
+	class Storage
+		def get_storage_path
+			return APPPATH.'cache/';
+		end
 	end
 end
