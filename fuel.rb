@@ -42,6 +42,21 @@ module PrepareConsole
 
 			), array('id'), true, false, null, $keys);
 		end
+		def add_field
+		  \DBUtil::add_fields('agregate_info_pages', 
+			['agregate_users_id' => array('constraint' => 11, 'type' => 'int', 'unsigned' => true)]
+			);
+			\DBUtil::create_index('agregate_info_pages', ['agregate_users_id'], 'agregate_users_id_idx');
+			$key = ['constraint' => 'fk_agregate_info_pages', 'key' => 'agregate_users_id',
+				'reference'	=> [
+					'table'	=> 'agregate_users',
+					'column'	=> 'id',
+				],
+				'on_update'	=> 'no action',
+				'on_delete'	=> 'no action'
+			];
+			\DbUtil::add_foreign_key('agregate_info_pages', $key);
+		end
 	end
 end
 
