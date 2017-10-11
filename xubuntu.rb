@@ -1,4 +1,12 @@
 module Xubuntu
+	class XfceMenu
+		def setup
+			#Диалог настроек системы
+			#Внешний вид
+			#Вкладка Настройки
+			#Включить редактируемые комбинации клавиш
+		end
+	end
     class AudioRecorder
         def howInstall
             #sudo apt-add-repository ppa:osmoma/audio-recorder
@@ -151,5 +159,11 @@ module Xubuntu
 		HandleHibernateKey=ignore
 		HandleLidSwitch=ignore
 
+	end
+	class Date
+		def setMsk
+			sudo dpkg-reconfigure tzdata
+			#date --set='2017-03-19 12:12:12.0000'
+		end
 	end
 end

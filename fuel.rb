@@ -11,6 +11,10 @@ end
 
 module PrepareConsole
 	class Migration
+		def createIndexOnField
+			\DBUtil::create_index('table', 'field_name');
+		end
+	
 		#Пример создания внешних ключей
 		def up
 			$keys = [];
@@ -65,8 +69,29 @@ module Www
 		def find(id)
 			
 		end
-		def find('all', ['where' => [ ['field', '=><', value] ] )
-			
+		def find('all', ['where' => [ ['field', '=><', value]] ] )
+			# owner = N AND push_allow = 1 AND (push_token <> '' OR platform = 'AndroidV4')
+			aClientOwner = Model_Client::find('all', array(
+                    'where' => array(
+                        array('owner', '=', $oAgregator->owner),
+                        array('push_allow', '=', 1),
+                        array(
+							array('push_token', '<>', ''),
+							'or' =>array('platform', '=', 'AndroidV4')
+						),
+                    ),
+                ));
+            # select only some fields
+            aClientOwner = Model_Client::find('all', array(
+                    'where' => array(/** .. */),
+                    'select' => ['id', 'name']
+                ));
+            # no use previous cache (No make cache now????....)
+            aClientOwner = Model_Client::find('all', array(
+                    'where' => array(/** .. */),
+                    'select' => ['id', 'name'],
+                    `cache` => false
+                ));
 		end
 	end
 	class Observer_Custom
@@ -89,6 +114,38 @@ module Www
 			'Orm\Observer_MySuperClass' => array(
 				'events' => array('after_update', 'after_insert'), #before_* , *_save
 			),*/
+		end
+	end
+	
+	class Validate
+	    def usage
+			#$oValidation = Model_X::validate('uniquekey');
+			#if ($oValidation->run($aData)) {#aData  массив с полями как в модели
+				$oX->set($oValidation->validated());
+				$oX->save();
+			#}
+	    end
+	    
+	    def exampleValidateInModel
+			#class Model_X
+			public static function validate($factory)
+			{
+				$val = Validation::forge($factory);
+				$val->add_callable('myvalidation');
+				$val->add_field('title', 'Тайтл', 'trim|strip_tags|max_length[255]');
+				$val->add_field('description', 'META тег description', 'trim|strip_tags|max_length[255]');
+				$val->add_field('keywords', 'META тег keywords', 'trim|strip_tags|max_length[255]');
+				$val->add_field('heading', 'Заголовок SEO текста', 'trim|strip_tags|max_length[255]');
+				$val->add_field('body', 'SEO текст', 'trim|strip_tags|max_length[255]');
+				$val->add_field('user_id', '', 'trim|intval');
+				return $val;
+			}
+	    end
+	end
+	class Cahce end
+	class Storage
+		def get_storage_path
+			return APPPATH.'cache/';
 		end
 	end
 end

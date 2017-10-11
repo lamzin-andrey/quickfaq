@@ -1,4 +1,7 @@
 <?
+function mysql_server_socket_recovery() {
+	"sudo /opt/lampp/bin/mysqld_safe --skip-grant-tables &";
+}
 function change_root_password() {
 	"mysqladmin -u root -p password '123456' ";
 }
