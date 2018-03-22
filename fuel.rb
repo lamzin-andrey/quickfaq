@@ -81,6 +81,14 @@ module Www
 						),
                     ),
                 ));
+            # owner = N OR push_allow = 1
+            aClientOwner = Model_Client::find('all', array(
+				'where' => array(
+					array('owner', '=', $oAgregator->owner),
+					'or' => array('push_allow', '=', 1)
+					
+				),
+			));
             # select only some fields
             aClientOwner = Model_Client::find('all', array(
                     'where' => array(/** .. */),
@@ -90,7 +98,7 @@ module Www
             aClientOwner = Model_Client::find('all', array(
                     'where' => array(/** .. */),
                     'select' => ['id', 'name'],
-                    `cache` => false
+                    `from_cache` => false
                 ));
 		end
 	end
