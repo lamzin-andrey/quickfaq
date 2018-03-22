@@ -1,4 +1,8 @@
 <?
+function deadloc_info() {
+	//пользователем имеющим права (например root)
+	SHOW ENGINE INNODB STATUS
+}
 function mysql_server_socket_recovery() {
 	"sudo /opt/lampp/bin/mysqld_safe --skip-grant-tables &";
 }
@@ -6,7 +10,13 @@ function change_root_password() {
 	"mysqladmin -u root -p password '123456' ";
 }
 function shared_db_for_user() {
+	//CREATE DATABASE mydb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+	//SET NAMES utf8 COLLATE utf8_unicode_ci при просмотре в консоли.
+	
+	
 	//GRANT ALL PRIVILEGES ON *.* TO 'root'@'95.153.132.132' IDENTIFIED BY '*******';
+	
+	sudo apt-get install language-pack-ru-base console-cyrillic
 	
 	//close access
 	//DELETE FROM user WHERE Host = '95.153.132.132';
