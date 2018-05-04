@@ -149,3 +149,14 @@ module Www
 		end
 	end
 end
+
+
+module DB
+	class Pure
+		def singlevalue
+			$data = \DB::query('SELECT id FROM t LIMIT 1')->execute();
+			#if result exists $data[0]['id']
+			#if no exists $data[0] is null
+		end
+	end
+end
