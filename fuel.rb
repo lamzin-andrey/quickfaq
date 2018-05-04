@@ -167,4 +167,10 @@ module DB
 			#if no exists $data[0] is null
 		end
 	end
+	class Builder
+		def insert
+			$a = \DB::insert('company_order_statuses')->set(['name' => $s])->execute();
+			#if result, insertId will in $a[0]
+		end
+	end
 end
