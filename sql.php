@@ -217,3 +217,16 @@ function alter_table_change_column_type() {
     //ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
 
 }
+
+function bigDumpRedo() {
+	/* если не хочет импортировать большие дампы, попробуй так
+	/opt/lampp/bin/mysql -uroot -p123456 -e"SET GLOBAL innodb_fast_shutdown = 0"
+	#service mysql stop
+	/opt/lampp/lampp stop
+	#mv /var/lib/mysql/ib_logfile[01] /tmp
+	mv /opt/lampp/var/mysql/ib_logfile0 /tmp
+	mv /opt/lampp/var/mysql/ib_logfile1 /tmp
+	#service mysql start
+	/opt/lampp/lampp start
+	*/
+}
