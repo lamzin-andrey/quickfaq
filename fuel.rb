@@ -61,6 +61,17 @@ module PrepareConsole
 			];
 			\DbUtil::add_foreign_key('agregate_info_pages', $key);
 		end
+		def add_decimal_field
+			\DBUtil::add_fields('cities', [
+				'lat' => [
+					'type' => 'decimal',
+					'null' => true,
+					'constraint' => [10, 6],
+					'default' => 0.00,
+					'comment' => 'Широта страна моя родная'
+				]
+			]);
+		end
 	end
 end
 
@@ -171,6 +182,13 @@ module DB
 		def insert
 			$a = \DB::insert('company_order_statuses')->set(['name' => $s])->execute();
 			#if result, insertId will in $a[0]
+		end
+		def update
+			$aIdList = \Arr::pluck($aCategories, 'id');
+				\DB::update($sModelClassName::getTableName())->
+				set(['city_id' => $nCityId])->
+				where('city_id', 'in', $aIdList)->
+				execute();
 		end
 	end
 end

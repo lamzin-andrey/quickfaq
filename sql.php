@@ -7,7 +7,7 @@ function mysql_server_socket_recovery() {
 	"sudo /opt/lampp/bin/mysqld_safe --skip-grant-tables &";
 }
 function change_root_password() {
-	"mysqladmin -u root -p password '123456' ";
+	"/opt/lampp/bin/mysqladmin -u root -p password '123456' ";
 }
 function shared_db_for_user() {
 	//CREATE DATABASE mydb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
