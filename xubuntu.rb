@@ -16,8 +16,19 @@ module Xubuntu
         
     end
     
+    class Mc
+		def freeSpaceInfo
+			#Смотрим статистику в правом нижнем углу
+			#2341/2794 85%
+			#Копируем папку объёмом 37Гб
+			#Смотрим статистику в правом нижнем углу
+			#2304/2749 83%
+			#то есть после копирования папки в 37G число c % уменьшилось. То есть mc отображает процент свободного места
+		end
+    end
+    
     class FlashPlayer
-		def inslall
+		def inslallStandalone
 			sudo dpkg --add-architecture i386
 			sudo apt-get update
 			sudo apt-get install xvfb libcurl3:i386 libglib2.0-0:i386 libx11-6:i386 libxext6:i386 libxt6:i386 libxcursor1:i386 libnss3:i386 libgtk2.0-0:i386
