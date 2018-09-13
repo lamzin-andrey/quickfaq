@@ -98,7 +98,8 @@ module Www
             aClientOwner = Model_Client::find('all', array(
                     'where' => array(/** .. */),
                     'select' => ['id', 'name'],
-                    `from_cache` => false
+                    `from_cache` => false,
+                    'order_by'	=>	['field_name' => 'DESC']
                 ));
 		end
 	end
