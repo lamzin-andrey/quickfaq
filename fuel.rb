@@ -75,6 +75,12 @@ module PrepareConsole
 				]
 			]);
 		end
+		def delete_field
+			\DBUtil::drop_fields('publications', array(
+				'playmarket_name',
+				'playmarket_description',
+			));
+		end
 	end
 end
 
