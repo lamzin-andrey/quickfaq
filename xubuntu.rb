@@ -177,4 +177,9 @@ module Xubuntu
 			#date --set='2017-03-19 12:12:12.0000'
 		end
 	end
+	class AVconv
+		def extractAudio
+			#avconv -i input.mp4 -vn -c:a libmp3lame -q:a 2 output.mp3
+		end
+	end
 end

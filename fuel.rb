@@ -86,8 +86,8 @@ end
 
 module Www
 	class Model
-		def find(id)
-			
+		def findWithRelations(id)
+			find('all', ['where' => [ ['field', '=><', value]], 'related' => ['status'] ] )
 		end
 		def find('all', ['where' => [ ['field', '=><', value]] ] )
 			# owner = N AND push_allow = 1 AND (push_token <> '' OR platform = 'AndroidV4')
