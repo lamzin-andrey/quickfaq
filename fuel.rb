@@ -49,6 +49,16 @@ module PrepareConsole
 
 			), array('id'), true, false, null, $keys);
 		end
+		def change_field_type
+			\DBUtil::modify_fields('agregate_city_user_balance', [
+				'created_at' => [
+					'comment'       => 'Время создания',
+					'null'          => true,
+					'type' => 'timestamp',
+					'default'=> new \Fuel\Core\Database_Expression('CURRENT_TIMESTAMP')
+				]
+			]);
+		end
 		def add_field
 		  \DBUtil::add_fields('agregate_info_pages', 
 			['agregate_users_id' => array('constraint' => 11, 'type' => 'int', 'unsigned' => true)]
