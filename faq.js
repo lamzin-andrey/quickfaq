@@ -220,7 +220,7 @@ function pureAjax(url, data, onSuccess, onFail, method) {
 	var sData = arr.join('&');
 	//установить метод  и адрес
 	//console.log("'" + url + "'");
-	xhr.open(method, url);
+	xhr.open(method, url, true);
 	//console.log('Open...');
 	//установить заголовок
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

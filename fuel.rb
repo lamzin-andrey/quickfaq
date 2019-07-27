@@ -15,7 +15,10 @@ end
 module PrepareConsole
 	class Migration
 		def createIndexOnField
-			\DBUtil::create_index('table', 'field_name');
+			\DBUtil::create_index('table', ['field_name'], 'index_name');
+		end
+		def createUniqueIndexOnField
+			\DBUtil::create_index('table', ['field_name'], 'index_name', 'UNIQUE');
 		end
 	
 		#Пример создания внешних ключей
