@@ -172,6 +172,35 @@ module Doctrine2
 	def Datetime
 		@see Entity.Datetime.created_at
 	end
+	
+	def findAll
+		@see findBy
+	end
+	
+	def findBy
+		#In controller
+		$this->getDoctrine()->getRepository('App[Bundle]::Product')->findBy(
+			[
+				'isDeleted' => 0,
+			],
+			[
+				'delta' => 'ASC'
+			],
+			10, # limit
+			0   # offset
+		);
+	end
+	
+	def getOneFieldValue
+		$oRepository = $this->container->get("doctrine")->getRepository("App:User");
+		#$oRepository = $this->getDoctrine()->getRepository("App:User");
+		$sPhone = $oRepository->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->select('u.phone')
+            ->getQuery()
+            ->getOneOrNullResult();
+	end
 end
 
 module REST
