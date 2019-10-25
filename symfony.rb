@@ -200,6 +200,37 @@ module Doctrine2
             ->select('u.phone')
             ->getQuery()
             ->getOneOrNullResult();
+            
+        #Also ->getSingleResult() #return array, result in zero position
+	end
+	
+	def getCollectionOfEntities
+		$aPhones = $oRepository->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->select('u.phone')
+            ->getQuery()
+            ->execute();
+	end
+	
+	def leftJoin
+		$aPhones = $oRepository->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->leftJoin('AppEntityCities', 'c', DoctrineORMQueryExprJoin::WITH, 'c.id = u.city')
+            ->addSelect('c.cityName')
+            ->select('u.phone')
+            ->getQuery()
+            ->getResult();
+	end
+	
+	def whereAndTokenOrOrToken
+		 $qb = $oRepository->createQueryBuilder('u');
+         $qb->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->andWhere( $qb->->expr()->andX('u.x = 1 OR u.y = 2 OR u.z = 10') )
+            ->select('u.phone');
+         $aPhones = $qb->getQuery()->execute();
 	end
 end
 
