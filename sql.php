@@ -178,7 +178,7 @@ function group_concat (){
 
 function unique_key_example() {
 	ALTER TABLE table ADD CONSTRAINT constr_ID UNIQUE (user_id, subj_id, date, time)
-	//mysl on duplicate
+	//mysql on duplicate
 	ON DUPLICATE KEY UPDATE fieldname = fieldname_or_value
 }
 
@@ -230,7 +230,7 @@ function bigDumpRedo() {
 	/opt/lampp/lampp start
 	*/
 }
-//как хранить в mysql ьв5 хеш не как строку а как число
+//как хранить в mysql md5 хеш не как строку а как число
 function md5() {
 	"INSERT INTO `mdd` (hash, str) VALUES (UNHEX(md5('x')), md5('x'))"
 	//hash имеет тип данных binary(16)
