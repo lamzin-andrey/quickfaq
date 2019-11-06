@@ -354,3 +354,11 @@ module NativeSqlQuery
             ->getResult();
 	end
 end
+
+module Repository
+	def createSelf
+		#class CitiesRepository extends ServiceEntityRepository
+		#__construct(ManagerRegistry $registry)
+		#	parent::__construct($registry, 'App:Cities');
+	end
+end
