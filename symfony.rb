@@ -169,6 +169,99 @@ module Entity
 end
 
 module Doctrine2
+	def findByCriteria
+		$oRepository = $this->getDoctrine()->getRepository('App:Main');
+		$oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where($e->eq('people', 1));
+		/** @var \Doctrine\ORM\LazyCriteriaCollection $aResult */
+		$aResult = $oRepository->matching($oCriteria);
+		$aResult->get(0);
+		
+		# более сложное условие
+		#SELECT * FROM main WHERE (people = 1 OR box = 1) AND (near = 1 OR far = 1)
+        $oRepository = $this->getDoctrine()->getRepository('App:Main');
+        $oCriteria = Criteria::create();
+        $oExpression = Criteria::expr();
+        $oCriteria->where( $oExpression->andX(
+                $oExpression->orX(
+                    $oExpression->eq('people', 1),
+                    $oExpression->eq('box', 1)
+                ),
+                $oExpression->orX(
+                    $oExpression->eq('far', 1),
+                    $oExpression->eq('near', 1)
+                )
+        ));
+        $aResult = $oRepository->matching($oCriteria);
+        
+        #а если бы надо было динамически
+        $oCriteria = Criteria::create();
+		$e = Criteria::expr();
+		$oCriteria->where( $e->eq('isDeleted', 0) )
+			->andWhere( $e->eq('isHide', 0) )
+			->andWhere( $e->eq('isModerate', 1) )
+			->orderBy(['delta' => Criteria::DESC])
+			->setMaxResults($limit)
+			->setFirstResult(0);
+		#...
+		$oSession = $oRequest->getSession();
+		$aOrWhereType = [];
+		$aOrWhereDistance = [];
+		if (intval($oSession->get('people', 0))) {
+			$aOrWhereType[] = $e->eq('people', 1);
+		}
+		if (intval($oSession->get('box', 0))) {
+			$aOrWhereType[] = $e->eq('box', 1);
+		}
+		#...
+		if (intval($oSession->get('far', 0))) {
+			$aOrWhereDistance[] = $e->eq('far', 1);
+		}
+		#...
+		if ($aOrWhereType) {
+            #Добавляем первые скобки с OR
+			$oCriteria->andWhere(call_user_func_array([$e, 'orX'], $aOrWhereType) );
+		}
+		if ($aOrWhereDistance) {
+            //Добавляем вторые скобки с OR
+			$oCriteria->andWhere(call_user_func_array([$e, 'orX'], $aOrWhereDistance) );
+		}
+		$aCollection = $repository->matching($oCriteria)->toArray();
+	end
+	
+	def queryCache
+		#1 Включить кеш второго уровня в config/packages/doctrine.yaml
+		# doctrine:
+		#	orm:
+		#		second_level_cache:
+		#			enabled: true
+        
+        #2 Добавить аннотации всем Entity
+        # @ORM\Cache(usage="READ_ONLY", region="regionname")
+        
+        #3 Использовать Criteria и EntityRepository::matching для получения результатов
+        #4 Если это невозможно, вызывать QueryBuilder::setCacheable(true)
+	end
+	def Memcache
+		#1 Включить кеш второго уровня в config/packages/doctrine.yaml
+		# doctrine:
+		#	orm:
+		#		second_level_cache:
+		#			regions:
+        #				regionname:
+		#					lifetime: 900
+        #            		cache_driver:
+        #                		type: memcache
+        #                		host: localhost
+        #                		port: 11211
+        
+        #2 Добавить аннотации всем Entity
+        # @ORM\Cache(usage="READ_ONLY", region="regionname")
+        
+        #3 Использовать Criteria и EntityRepository::matching для получения результатов
+        #4 Если это невозможно, вызывать QueryBuilder::setCacheable(true)
+	end
 	def Datetime
 		@see Entity.Datetime.created_at
 	end
@@ -247,7 +340,9 @@ module NativeSqlQuery
 		#....
 		$rsm = new ResultSetMapping();
 		$rsm->addEntityResult('SkyengTT\SkyengTTBundle\Entity\Vocabulary', 'v');
+								  #id - field in the sql query
 		$rsm->addFieldResult('v', 'id', 'id');
+											  #eng_word - field of the class SkyengTT\SkyengTTBundle\Entity\Vocabulary
 		$rsm->addFieldResult('v', 'eng_word', 'eng_word');
 		$rsm->addFieldResult('v', 'rus_word', 'rus_word');
 		$rsm->addFieldResult('v', 'answer_id', 'answer_id');
