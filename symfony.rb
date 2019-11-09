@@ -33,7 +33,8 @@ module Console
     #php app/console doctrine:migrations:status --show-versions
 		## Это создаст файл миграции в s3.loc/www/app/DoctrineMigrations/
     #php app/console doctrine:migrations:generate
-		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой php app/console doctrine:migrations:status --show-versions
+		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой 
+		 #php app/console doctrine:migrations:status --show-versions
     #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
   end
 end
@@ -41,6 +42,10 @@ end
 module Configuration
   def mainConfigName
     #app/config/parameters.yml
+  end
+  def swiftmailerInEnvFile
+	# MAILER_URL=gmail://username_without!_@gmail.com:password@localhost
+	# smtp://smtp.gmail.com:587?encryption=tls&auth_mode=login&username=username_without!_@gmail.com&password=password
   end
 end
 
