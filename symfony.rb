@@ -179,7 +179,7 @@ module Doctrine2
 		$oCriteria = Criteria::create();
 		$e = Criteria::expr();
 		$oCriteria->where($e->eq('people', 1));
-		/** @var \Doctrine\ORM\LazyCriteriaCollection $aResult */
+		#/** @var \Doctrine\ORM\LazyCriteriaCollection $aResult */
 		$aResult = $oRepository->matching($oCriteria);
 		$aResult->get(0);
 		
@@ -206,32 +206,32 @@ module Doctrine2
 		$oCriteria->where( $e->eq('isDeleted', 0) )
 			->andWhere( $e->eq('isHide', 0) )
 			->andWhere( $e->eq('isModerate', 1) )
-			->orderBy(['delta' => Criteria::DESC])
+		#	->orderBy(['delta' => Criteria::DESC])
 			->setMaxResults($limit)
 			->setFirstResult(0);
 		#...
 		$oSession = $oRequest->getSession();
 		$aOrWhereType = [];
 		$aOrWhereDistance = [];
-		if (intval($oSession->get('people', 0))) {
-			$aOrWhereType[] = $e->eq('people', 1);
-		}
-		if (intval($oSession->get('box', 0))) {
-			$aOrWhereType[] = $e->eq('box', 1);
-		}
+		#if (intval($oSession->get('people', 0))) {
+		#	$aOrWhereType[] = $e->eq('people', 1);
+		#}
+		#if (intval($oSession->get('box', 0))) {
+		#	$aOrWhereType[] = $e->eq('box', 1);
+		#}
 		#...
-		if (intval($oSession->get('far', 0))) {
-			$aOrWhereDistance[] = $e->eq('far', 1);
-		}
+		#if (intval($oSession->get('far', 0))) {
+		#	$aOrWhereDistance[] = $e->eq('far', 1);
+		#}
 		#...
-		if ($aOrWhereType) {
+		#if ($aOrWhereType) {
             #Добавляем первые скобки с OR
 			$oCriteria->andWhere(call_user_func_array([$e, 'orX'], $aOrWhereType) );
-		}
-		if ($aOrWhereDistance) {
-            //Добавляем вторые скобки с OR
-			$oCriteria->andWhere(call_user_func_array([$e, 'orX'], $aOrWhereDistance) );
-		}
+		#}
+		#if ($aOrWhereDistance) {
+            #//Добавляем вторые скобки с OR
+		#	$oCriteria->andWhere(call_user_func_array([$e, 'orX'], $aOrWhereDistance) );
+		#}
 		$aCollection = $repository->matching($oCriteria)->toArray();
 	end
 	
@@ -366,4 +366,31 @@ module Repository
 		#__construct(ManagerRegistry $registry)
 		#	parent::__construct($registry, 'App:Cities');
 	end
+end
+
+module Twig
+	def ifdefined
+		#if ( nIspage100Percents is defined )
+	end
+	
+	def ifnotdefined
+		#if ( nIspage100Percents is not defined )
+	end
+	
+	def isvardefined
+		see_ifdefined
+	end
+	
+	def isvarnotdefined
+		see_ifnotdefined
+	end
+	
+	def route
+		#< ahref="{{path('My_route')}}" >Link</a>
+	end
+	
+	def link
+		see_route
+	end
+	
 end
