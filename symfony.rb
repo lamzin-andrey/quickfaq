@@ -369,28 +369,33 @@ module Repository
 end
 
 module Twig
-	def ifdefined
-		#if ( nIspage100Percents is defined )
+	class twigVariable
+		def ifdefined
+			#if ( nIspage100Percents is defined )
+		end
+		
+		def ifnotdefined
+			#if ( nIspage100Percents is not defined )
+		end
+		
+		def isvardefined
+			see_ifdefined
+		end
+		
+		def isvarnotdefined
+			see_ifnotdefined
+		end
+		
+		def resetvalue
+			#{% set doNotShowCabBtn = 1 %}
+		end
 	end
-	
-	def ifnotdefined
-		#if ( nIspage100Percents is not defined )
-	end
-	
-	def isvardefined
-		see_ifdefined
-	end
-	
-	def isvarnotdefined
-		see_ifnotdefined
-	end
-	
+		
 	def route
 		#< ahref="{{path('My_route')}}" >Link</a>
 	end
-	
+		
 	def link
 		see_route
 	end
-	
 end
