@@ -253,6 +253,7 @@ module Doctrine2
 		# doctrine:
 		#	orm:
 		#		second_level_cache:
+		#		enabled: true
 		#			regions:
         #				regionname:
 		#					lifetime: 900
@@ -397,5 +398,16 @@ module Twig
 		
 	def link
 		see_route
+	end
+	
+	def overrideBundleViewFile
+		#cp fos/user-bundle/Resources/views/layout.html.twig
+		#to templates/bundles/FOSUserBundle/layout.html.twig
+	end
+end
+module Translation
+	def overrideBundleLangFile
+		#cp fos/user-bundle/Resources/translations/FOSUserBundle.ru.yml
+		#to translations/FOSUserBundle.ru.yml
 	end
 end
