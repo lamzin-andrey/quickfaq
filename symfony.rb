@@ -127,6 +127,21 @@ module Migration
 	def addSql
 		#$this->addSql("NATIVE SQL QUERY");
 	end
+	
+	def selectAndUpdateEntities
+		#use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+		#use Symfony\Component\DependencyInjection\ContainerInterface;
+		#use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
+		#use App\Entity\Main;
+		#use App\Entity\Users;
+		
+		#//add implements ContainerAwareInterface
+		#final class Version20191115131343 extends AbstractMigration  implements ContainerAwareInterface
+		
+		#//add setContainer method
+		#public function setContainer(ContainerInterface $container = null);
+	end
 end
 
 module Entity
@@ -174,6 +189,17 @@ module Entity
 end
 
 module Doctrine2
+	class Assert
+		def localizationMessages
+			#Чтобы локализовать сообщение X, которое например в @Assert\NotBlank(message="X")
+			#Создаёшь файл translations/validators.ru.yml и в нем пишешь.
+			#X: FFFFFF!
+			
+			#То есть всё просто и то, что домен трансляции для formBuilfer 
+			#может быть указан как FOSГыукИгтвду сбивать с толку не должно.
+		end
+	end
+	
 	def findByCriteria
 		$oRepository = $this->getDoctrine()->getRepository('App:Main');
 		$oCriteria = Criteria::create();
