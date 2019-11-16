@@ -80,8 +80,14 @@ module Controller
   end
   
   def AuthUser
-    #Подключение SecurityContext
+	#(Sym 2.6)
+    #Подключение SecurityContext 
 	#use Symfony\Component\Security\Core\SecurityContext;
+	
+	#(Sym 3.4)
+    #Подключение Security
+	#use Symfony\Component\Security\Core\Security;
+	
 	
 	#Как проверить, была ли ошибка авторизации
 	#$request->attributes->has(SecurityContext::AUTHENTICATION_ERROR);
@@ -196,7 +202,7 @@ module Doctrine2
 			#X: FFFFFF!
 			
 			#То есть всё просто и то, что домен трансляции для formBuilfer 
-			#может быть указан как FOSГыукИгтвду сбивать с толку не должно.
+			#может быть указан как FOSUserBundle - это сбивать с толку не должно.
 		end
 	end
 	
@@ -436,4 +442,243 @@ module Translation
 		#cp fos/user-bundle/Resources/translations/FOSUserBundle.ru.yml
 		#to translations/FOSUserBundle.ru.yml
 	end
+	
+	def AnnotationAssertMessages
+		# see OverrideBundle.Translations.AnnotationAssertMessages
+		OverrideBundle.Translations.AnnotationAssertMessages
+	end
+end
+
+module FormBuilderInterface
+	# Sym 3.4 (Sym cli 4.3)
+	
+	# options - третий аргумент метода FormBuilderInterface::add
+	class add
+		def name
+			# Либо имя поля, которое есть в связанной сущности, либо тупо имя и тогда mapped => false
+			options.mapped
+		end
+		def className
+			# обычно передаём например так: CheckboxType::class (там огромный namespace ещё есть)
+		end
+		def options
+		 #see options
+		 options.mapped
+		end
+	end
+
+	# options - третий аргумент метода FormBuilderInterface::add
+	class options
+		def mapped
+			#При установке в false позволяет добавлять поля, которых нет в entity
+		end
+		def addCustomField
+			#@see mapped
+			mapped
+		end
+		def setInputAttributes
+			# $options - третий аргумент метода add
+			# Установить таким образом id, type - невозможно. Вобще никак невозможно, не мучайся.
+			# $options['attr'] => [ 'value' => '1', 'autocomplete' => 'current_password' ]
+		end
+		def required
+			#default false
+		end
+		def label
+			#bo comment
+		end
+		def translation_domain
+			#Можно указать имя файла с трансляцией (например FOSUserBundle, если существует файл 
+			#  translations/FOSUserBundle.ru.yml)
+			# Чтобы использовать messages.ru.yaml указать null
+		end
+	end
+	
+	class RadioType
+		# использовать RadioType нет смысла, используй ChoiceType
+		def ChoiceType
+			#[
+			#	'expanded' => true, 'multiple' => false
+			#	'choices' => [
+			#		'One' => false,
+			#		'Two' => true,
+			#		'Three' => false
+			#	]
+			#]
+		end
+		
+		def CheckboxType
+			# В Symfony 3.4 in 16/11/2019 имел траблу - надписи выводились перед чекбоксом. Как победить глобально - см
+			# see 
+			OverrideBundle.FormTheme.Global
+		end
+		
+		def NumberType
+			#Если нужен в результате input[type=number] на момент 16/11/2019 используй MoneyType или IntegerType.
+			# А  NumberType выводится как input[type=text] - наверное им  (Symfony-стам) так надо.
+		end
+	end
+end
+
+module OverrideBundle
+
+	# Sym 3.4 Sym - CLI 4.3
+	
+	class FormTheme
+		# Перегружаем что-то для всех форм, используемых в проекте
+		def Global
+			# надо создать файл templates/form/layout.html.twig
+			# и определить в нём блок form_row
+			
+			# содержимое form_row.html.php по умолчанию 
+			# {{- form_label(form) -}}
+			# {{- form_errors(form) -}}
+			#  это непосредственно инпут
+			# {{- form_widget(form) -}}
+			
+			# доступна переменная-массив block_prefixes и один из его элементов 
+			# позволяет определить тип инпута, например он равен checkbox если в конструкторе формы
+			# использовался CheckboxType
+		end
+	end
+	
+	class View
+		def FOSUserBundle
+			# На примере FOSUserBundle
+			# Берем файлы  vendor/friendsofsymfony/user-bundle/Resources/views/Resetting/request_content.html.twig
+			# и vendor/friendsofsymfony/user-bundle/Resources/views/Resetting/request.html.twig
+			
+			# и сохраняем в templates/bundles/FOSUserBundle/Resetting/request_content.html.twig
+			# и в templates/bundles/FOSUserBundle/Resetting/request.html.twig
+			# соответственно.
+			#
+			# Пишем в них код, радуемся.
+			#
+			#
+		end
+	end
+	
+	class Controller
+		def FOSUserBundle
+			# На примере FOSUserBundle
+			
+			# Берем файл vendor/friendsofsymfony/user-bundle/Controller/ResettingController.php
+			
+			# и сохраняем в src/Controller/ResettingController.php
+			
+			#
+			# Наследование от Controller меняем на наследование от AbstractController
+			# Добавляем use оригинальный контроллер.
+			# Не забываем сменить namespace
+			# Берем полное имя перегружаемого контроллера (namespace + имя класса)
+			# Выполняем поиск по xml, yaml и yml файлам этого имени (оно должно быть в атрибуте class) 
+			# и получаем значение атрибута id - его и передаем в конфиге после decorates.
+			# Идентификаторы сервисов - аргументов можно также видеть в найденном конфигурационном файле.
+			# Мы переписываем их в config/services.yaml
+			# но нулевым аргументом передаём  App\Controller\ResettingController.inner. 
+			# Понятно только что это ПОЛНОЕ_ИМЯ_нашей_КОПИИ_их_КОНТРОЛЛЕРА.inner - вероятно, это такое правило.
+			
+			# Пример получившегося конфига (который добавляем в файл config/services.yaml):
+			#	App\Controller\ResettingController:
+			#	decorates: fos_user.resetting.controller
+			#	arguments:
+			#		- '@App\Controller\ResettingController.inner'
+			#		- '@event_dispatcher'
+			#		- '@fos_user.resetting.form.factory'
+			#		- '@fos_user.user_manager'
+			#		- '@fos_user.util.token_generator'
+			#		- '@fos_user.mailer'
+			#		- '%fos_user.resetting.retry_ttl%'
+			#		- '@security.csrf.token_manager
+			
+			
+			#  Далее, в файле с маршрутами указать, что теперь соответствующий маршрут обрабатывает наш контроллер
+			#
+			
+			# Это фрагмент файла
+			#	fos_user_resetting_request:
+			#		path: /remind
+			#		defaults: { _controller: 'AppControllerResettingController::requestAction' }
+			#
+		end
+	end
+	
+	class Form
+		
+		# Sym 3.4 (Sym CLI 4.3)
+		
+		# На примере FOSUserBundle
+		
+		# Создаём src/Form/ProfileFormType
+		
+		#	namespace App\Form;
+		#	use Symfony\Component\Form\AbstractType;
+		#	use Symfony\Component\Form\FormBuilderInterface;
+		
+		#	class ProfileFormType extends AbstractType{
+		#		
+		#		
+		#		public function buildForm(FormBuilderInterface $oBuilder, array $options)
+		#		{
+		#			//Например, удаляем одно из полей оригинальной формы и добавляем другое
+		#			$oBuilder->remove('username');
+		#			$oBuilder->add('display_name');
+		#		}
+		#		Это обязательно!
+		#		public function getParent()
+		#		{
+		#			return 'FOS\UserBundle\Form\Type\ProfileFormType';
+		#		}
+		#		Это обязательно! Значение используется в config/services.yaml
+		#		public function getBlockPrefix() : string
+		#		{
+		#			return 'app_user_profile';
+		#		}
+		#		Это обязательно, но не связано с перегрузкой, для любой формы так надо!
+		#		public function getName() : string
+		#		{
+		#			return $this->getBlockPrefix();		
+		#		}
+		#		
+		#	} 
+		
+		# Далее 
+		# В файле config/services.yaml  добавляем
+		
+		#
+		#	app.form.profile:
+		#		class: App\Form\ProfileFormType
+		#		tags:
+		#			- { name: form.type, alias: app_user_profile }
+		#
+		#
+		
+		# Далее 
+		# В файле  config/packages/fos_user.yml  добавляем
+		
+		#
+		#	profile:
+		#		form:
+		#			type: App\Form\ProfileFormType 
+		#
+		
+	end
+
+	class Translations
+		def FOSUserBundle
+			# На примере FOSUserBundle
+			# Берем файл  vendor/friendsofsymfony/user-bundle/Resources/translations/FOSUserBundle.ru.yml
+			# и сохраняем в translations/FOSUserBundle.ru.yml
+			#
+			# Пишем код, радуемся.
+			#
+		end
+		
+		def AnnotationAssertMessages
+			# тут независимо от бандла всё в файле translations/validators.ru.yml
+			# see also
+			Doctrine2.Assert.localizationMessages
+		end
+	end
+	
 end
