@@ -680,5 +680,42 @@ module OverrideBundle
 			Doctrine2.Assert.localizationMessages
 		end
 	end
-	
+end #OverrideBundle
+
+# Sym 3.4 Sym-CLI 4.3
+module SwiftMailer
+	class sendEmail
+		def send
+			# in controller
+			
+			# use Symfony\Bundle\SwiftmailerBundle;
+			
+			# $message = new Swift_Message();
+			# $message->setSubject($s);
+			# $message->setBody($s, "text/html", "UTF-8");
+			# $message->setFrom($s);
+			# $message->setTo($s);
+			# $this->get('mailer')->send($message);
+		end
+		
+		def configDotEnvGmail
+			# Да, username тут указывается без @gmail.com.
+			# Да, localhost тут можно (возможно, даже нужно) оставить без изменений.
+			# MAILER_URL=gmail://yourbox:password@localhost
+			
+			# Тоже вариант
+			# MAILER_URL=smtp://smtp.gmail.com:587?encryption=tls&auth_mode=login&username=yourbox&password=***
+		end
+		
+		def configDotEnvISPMgrMailbox
+			# Это пример с сайта, размещённого на hostiman.ru
+			# В админке ISPMgr создан ящик, у него есть пароль и всё что надо.
+			
+			# Да, username тут указывается с @andryuxa.ru.
+			# mail.andryuxa.ru взято из настроек IspMgr.
+			# Порт для tls другой, но к нему подсоединиться не удалось
+			
+			# MAILER_URL=smtp://mail.andryuxa.ru:25?auth_mode=login&username=admin@andryuxa.ru&password=*****
+		end
+	end
 end
