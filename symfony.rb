@@ -67,10 +67,19 @@ module Controller
   end
   
   def request
+	# Sym 2.6
     #$request = $this->getRequest()->request;
+    
+    # Sym 3.4
+    # argument (Request $request)
+    
     # ->has(); (?) -> get(); (?)  -> set(); (?)
     #$attr = $request->attributes
     # ->has();  -> get();   -> set(); (?)
+  end
+  
+  def requestMethod
+	$request->getMethod();
   end
   
   def session
@@ -93,6 +102,20 @@ module Controller
 	#$request->attributes->has(SecurityContext::AUTHENTICATION_ERROR);
 	#$error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
 
+  end
+  
+  def checkCurrentPassword
+	$oUser = $this->oContainer->get('security.token_storage')->getToken()->getUser();
+	#/** @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoder $encoder */
+	$encoder = $this->_oContainer->get('security.password_encoder');
+	$bCurrentPasswordIsValid = $encoder->isPasswordValid($oUser, $sRawPassword);
+  end
+  
+  def getAuthUser
+	#Sym 3.4
+	$oUser = $this->getUser();
+	#or, if all wrong
+	$oUser = $this->oContainer->get('security.token_storage')->getToken()->getUser();
   end
   
   class Response
