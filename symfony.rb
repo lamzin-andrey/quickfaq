@@ -455,6 +455,23 @@ module Twig
 		def resetvalue
 			#{% set doNotShowCabBtn = 1 %}
 		end
+		
+		def setGlobal
+			#in yaml file
+			#twig:
+			#	globals:
+			#		x: 15
+			#		y: "%app.y%"
+			
+			#Тогда в  services.yaml должно быть
+			#parameters:
+			#	app.y: 159
+			
+			# или 
+			
+			#parameters:
+			#	app.y: "%env(resolve:ENV_FILE_PARAMETER_Y)%"
+		end
 	end
 		
 	def route
