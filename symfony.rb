@@ -742,3 +742,76 @@ module SwiftMailer
 		end
 	end
 end
+
+module EventListener
+	class KernelEvents
+		#This event is dispatched after the controller to be executed has been resolved but before executing it. 
+		# Запускается перед запуском метода контроллера, но уже знаем какой контроллер будет запущен.
+		def onKernelController(\Symfony\Component\HttpKernel\Event\FilterControllerEvent $evt)
+		
+		end
+		
+		#This event is dispatched just before a controller is called. 
+		# Вызывается перед выхзовом контроллера. Можно подменить аргументы (метода?) контроллера
+		def onKernelControllerArguments(FilterControllerArgumentsEvent $event)
+		end
+		
+		#This event is dispatched after the controller has been executed but only if the controller does not return a Response object. It's useful to transform the returned value (e.g. a string with some HTML contents) into the Response object needed by Symfony:
+		# Вызывается только если контролер не вернул объект Response - можно завернуть строку или число, которое он вернул
+		#   в new Response() 
+		def onKernelView(GetResponseForControllerResultEvent $event)
+			value = $event->getControllerResult();
+			$response = new Response();
+			# // ... somehow customize the Response from the return value
+			$event->setResponse($response);
+		end
+		
+		# Можем изменить объект Response (понаставить заголовком, кук и т. п.) А вот переменные для viewData изменить увы - нельзя.
+		def onKernelResponse(FilterResponseEvent $event)
+			 $response = $event->getResponse();
+		end
+		
+		# This event is dispatched after the kernel.response event. Происходит после kernel.response event
+		# It's useful to reset the global state of the application  Полезно для изменения глобального состояния приложения.
+		# (for example, the translator listener resets                Например тут переустанавливается устанавливается локаль
+		# the translator's locale to the one of the parent request):	(а вот что такое "родительский запрос" - это туманно пока)
+		def onKernelFinishRequest(FinishRequestEvent $event)
+			#if (null === $parentRequest = $this->requestStack->getParentRequest()) {
+			#	return;
+			#}
+			## // reset the locale of the subrequest to the locale of the parent request
+			#$this->setLocale($parentRequest);
+		end
+		
+		def  onKernelException(GetResponseForExceptionEvent $event)
+			$exception = $event->getException();
+			$response = new Response();
+			// setup the Response object based on the caught exception
+			$event->setResponse($response);
+		end
+		
+		# Ещё не знаем, какой контроллер будет запущен
+		def onRequestEvent
+		end
+	end
+	class CreateListener
+		# Sym 3.4
+		def yaml
+			# Здесь подписываемся на одно событие
+			# #app/config/services.yml
+			#services:
+			#	App\EventListener\KernelEventsListener:
+			#		tags:
+			#			- { name: kernel.event_listener, event: kernel.controller }
+		end
+		def php
+			# create file src/EventListener/KernelEventsListener.php
+			# Не реализует интерфейсов!
+			# Не наследует!
+			# 
+			#public function onKernelController(\Symfony\Component\HttpKernel\Event\FilterControllerEvent $evt);
+			# see any events in KernelEvents
+			KernelEvents
+		end
+	end
+end
