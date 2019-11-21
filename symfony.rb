@@ -41,7 +41,11 @@ end
 
 module Configuration
   def mainConfigName
+	# 2.6
     #app/config/parameters.yml
+    
+    # 3.4
+    #config/services.yaml
   end
   def swiftmailerInEnvFile
 	# MAILER_URL=gmail://username_without!_@gmail.com:password@localhost
@@ -227,6 +231,12 @@ module Doctrine2
 			#То есть всё просто и то, что домен трансляции для formBuilfer 
 			#может быть указан как FOSUserBundle - это сбивать с толку не должно.
 		end
+	end
+	
+	def fieldComment
+		# /*
+		#  * @ORM\Column(type="string", length=64, nullable=true, options={"comment"="User login"})
+		# */
 	end
 	
 	def findByCriteria
