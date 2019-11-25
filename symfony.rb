@@ -1,5 +1,6 @@
 module Console
   def createBundle #Как сгенерить бандл генерация бандла 
+	# 2.6
     #php app/console generate:bundle --namespace=Acme/HelloBundle
   end
   def createDatabase
@@ -36,6 +37,11 @@ module Console
 		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой 
 		 #php app/console doctrine:migrations:status --show-versions
     #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
+  end
+  
+  def createApp
+	# 3.4, symfony cli 4.7
+	#symfony new appname --full [--version=3.4]
   end
 end
 
@@ -733,6 +739,21 @@ module OverrideBundle
 end #OverrideBundle
 
 # Sym 3.4 Sym-CLI 4.3
+module Session
+	class config
+		def setLifetime
+			# config/packages/framework.yaml
+			
+			# auth expired after one minute
+			
+			# framework:
+			# 	session:
+			# 		cookie_lifetime: 60
+		end
+	end
+end
+
+# Sym 3.4 Sym-CLI 4.3
 module SwiftMailer
 	class sendEmail
 		def send
@@ -840,5 +861,269 @@ module EventListener
 			# see any events in KernelEvents
 			KernelEvents
 		end
+	end
+end
+
+# Sym 3.4
+
+module Bundles
+	class FOSUserBundle
+		def RegistrationEmailConfirm
+			# registration:
+			#	confirmation:
+            #		enabled: true
+		end
+	end
+end
+
+# Sym 3.4
+module Security
+	class Yaml
+		def security_yaml
+		#main:
+        #    pattern: ^/
+        #    security: true
+        #    anonymous: ~
+        #    logout_on_user_change: true
+        #    form_login:
+        #        provider: users
+        #	 #след. два в принципе необязательно указывать
+        #	 #login_path: /login
+			 # можно указать как имя маршрута так и значение path:
+        #    #check_path: /login_check
+        #    
+        #    logout:
+        #        target: /hello/anonymous
+        
+        # конфигурация провайдера
+        # 
+        # для стандартного EntityUserProvider:
+        # providers: 
+		# 	users:
+		#	   entity:
+		#			class: App\Entity\User
+		#			property: username
+		# 
+		# для собственного провайдера
+		# providers:
+		#	special:
+		#		id: app.user.provider
+        #
+        # сослаться на провайдер в form_login
+        
+        # отдельно указываем алгоритм шифрования
+        # encoders:
+        # App\Entity\User: { algorithm: bcrypt }
+		end
+		
+		def services
+			# в случае собственного провайдера
+			# app.user.provider:
+			#	class: App\Provider\AppUserProvider
+			#	arguments: ['@doctrine']
+		end
+		
+		def routes
+			#logout:
+			#	path: /logout
+		end
+	end 
+	class Controller
+		#class SecurityController extends Controller
+		#{
+		#	/**
+		#	 * @Route("/login", name="login")
+		#	*/
+		#	public function loginAction(AuthenticationUtils $authenticationUtils)
+		#	{
+		#		// get the login error if there is one
+		#		$error = $authenticationUtils->getLastAuthenticationError();
+#
+#				// last username entered by the user
+#				$lastUsername = $authenticationUtils->getLastUsername();
+#			
+#				return $this->render('security/login.html.twig', [
+#					'controller_name' => 'SecurityController',
+#					 'last_username' => $lastUsername,
+#					'error'         => $error,#
+#				]);
+#			}
+#			
+#			/**
+#			 * @Route("/login_check", name="check_path")
+#			*/
+#			public function check()
+#			{
+#				return $this->redirectToRoute('login');
+#			}
+#			/**
+#			 * @Route("/register", name="register")
+#			*/
+#			public function register(Request $oRequest, UserPasswordEncoderInterface $oEncoder)
+#			{
+#				if ($oRequest->getMethod() == 'POST') {
+#					$sPassword = $oRequest->get('password');
+#					$sPassword2 = $oRequest->get('password2');
+#					$sEmail = $oRequest->get('email');
+#					$sUsername = $oRequest->get('login');
+#					
+#					if ($sPassword != $sPassword2) {
+#						$this->addFlash('notice', 'Passwords is different!');
+#						return $this->redirectToRoute('register');
+#					}
+#					$oUser = new User();
+#					$sPassword = $oEncoder->encodePassword($oUser, $sPassword);
+#					
+#					$oUser->setPassword($sPassword);
+#					$oUser->setEmail($sEmail);
+#					$oUser->setUsername($sUsername);
+#					$oUser->setIsEmailApproved(true);
+#					
+#					$oEm = $this->getDoctrine()->getManager();
+##					$oEm->flush();
+	#				return $this->redirectToRoute('login');
+#				}
+#				return $this->render('security/register.html.twig', [
+#					'controller_name' => 'SecurityController',
+#				]);
+#			}
+#		}
+	end
+	
+	class Entity
+		#implements UserInterface
+		
+		#before class @ORM\Table(name="user")
+		
+		#public function getRoles()
+		#{
+		#	return ['ROLE_USER'];
+		#}
+		
+		#public function eraseCredentials()
+		#{
+		#	;
+		#}
+	end
+	
+	class Provider
+	    # Копируешь EntityUserProvider и изменяешь по ходу требований
+	
+	     #например так
+	     #class AppUserProvider implements UserProviderInterface
+		#	{
+		#		private $registry;
+		#		private $managerName = null;
+		#		private $classOrAlias;
+		#		private $class;
+		#		private $property = 'username';
+		#		private $repository;
+#
+#				public function __construct($doctrine)
+#				{
+#					$this->property = 'username';
+#					$this->class = $this->classOrAlias = get_class(new User() );
+#					$this->repository = $doctrine->getRepository($this->class);
+#					$this->registry = $doctrine;
+#				}
+#
+#				/**
+#				 * {@inheritdoc}
+#				 */
+#				public function loadUserByUsername($username)
+#				{
+#					$repository = $this->getRepository();
+#					if (null !== $this->property) {
+#						$user = $repository->findOneBy([$this->property => $username,
+#							'isEmailApproved' => true]);
+#					} else {
+#						if (!$repository instanceof UserLoaderInterface) {
+#							throw new \InvalidArgumentException(sprintf('You must either make the "%s" entity Doctrine Repository ("%s") implement "Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface" or set the "property" option in the corresponding entity provider configuration.', $this->classOrAlias, \get_class($repository)));
+#						}
+#
+#						$user = $repository->loadUserByUsername($username);
+#						
+#					}
+#
+#					if (null === $user) {
+#						throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
+#					}
+#
+#					return $user;
+#				}
+#
+#				/**
+#				 * {@inheritdoc}
+#				 */
+#				public function refreshUser(UserInterface $user)
+#				{
+#					$class = $this->getClass();
+#					if (!$user instanceof $class) {
+#						throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+#					}
+#
+#					$repository = $this->getRepository();
+#					if ($repository instanceof UserProviderInterface) {
+#						$refreshedUser = $repository->refreshUser($user);
+#					} else {
+#						// The user must be reloaded via the primary key as all other data
+#						// might have changed without proper persistence in the database.
+#						// That's the case when the user has been changed by a form with
+#						// validation errors.
+#						if (!$id = $this->getClassMetadata()->getIdentifierValues($user)) {
+#							throw new \InvalidArgumentException('You cannot refresh a user '.
+#								'from the EntityUserProvider that does not contain an identifier. '.
+#								'The user object has to be serialized with its own identifier '.
+#								'mapped by Doctrine.'
+#							);
+#						}
+#
+#						$refreshedUser = $repository->find($id);
+#						if (null === $refreshedUser) {
+#							throw new UsernameNotFoundException(sprintf('User with id %s not found', json_encode($id)));
+#						}
+#					}
+#
+#					return $refreshedUser;
+#				}
+
+#				/**
+#				 * {@inheritdoc}
+#				 */
+#				public function supportsClass($class)
+#				{
+#					return $class === $this->getClass() || is_subclass_of($class, $this->getClass());
+#				}
+
+#				private function getObjectManager()
+#				{
+#					return $this->registry->getManager($this->managerName);
+#				}
+#
+#				private function getRepository()
+#				{
+#					return $this->repository;
+#				}
+#
+#				private function getClass()
+#				{
+#					if (null === $this->class) {
+#						$class = $this->classOrAlias;
+#
+#						if (false !== strpos($class, ':')) {
+#							$class = $this->getClassMetadata()->getName();
+#						}
+#
+#						$this->class = $class;
+#					}
+
+#					return $this->class;
+#				}
+
+#				private function getClassMetadata()
+#				{
+#					return $this->getObjectManager()->getClassMetadata($this->classOrAlias);
+#				}
+#			}
 	end
 end
