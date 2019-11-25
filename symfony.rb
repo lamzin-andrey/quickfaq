@@ -888,9 +888,14 @@ module Security
         #    form_login:
         #        provider: users
         #	 #след. два в принципе необязательно указывать
-        #	 #login_path: /login
+        #	 	#login_path: /login
 			 # можно указать как имя маршрута так и значение path:
-        #    #check_path: /login_check
+        #    	#check_path: /login_check
+        #    #а ещё можно вот так
+        #    csrf_token_generator: security.csrf.token_manager
+        #		#see services.yaml
+        #     success_handler: app.security.authentication_handler
+        #     failure_handler: app.security.authentication_handler
         #    
         #    logout:
         #        target: /hello/anonymous
@@ -921,6 +926,17 @@ module Security
 			# app.user.provider:
 			#	class: App\Provider\AppUserProvider
 			#	arguments: ['@doctrine']
+			
+			# В случае хэндлеров успешного или неуспешного логина
+			#app.security.authentication_handler:
+			#	class: App\Handler\AuthenticationHandler
+			#	public: false
+			#	arguments: ["@router", "@service_container"]
+
+			#app.security.logout_handler:
+			#	class: App\Handler\LogoutHandler
+			#	public: false
+			#	arguments: ["@service_container"]
 		end
 		
 		def routes
@@ -1125,5 +1141,97 @@ module Security
 #					return $this->getObjectManager()->getClassMetadata($this->classOrAlias);
 #				}
 #			}
+	end
+	
+	class Handler
+		def AuthenticationHandle
+#			namespace App\Handler;
+#
+#			use Symfony\Component\HttpFoundation\JsonResponse;
+#			use Symfony\Component\HttpFoundation\RedirectResponse;
+#			use Symfony\Component\Routing\RouterInterface;
+#			use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+#			use Symfony\Component\Security\Core\Exception\AuthenticationException;
+#			use Symfony\Component\HttpFoundation\Request;
+#			use Symfony\Component\Security\Core\Security;
+#			use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+#			use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+#			use Symfony\Component\DependencyInjection\ContainerInterface;
+#
+#			/**
+#			 * Class AuthenticationHandler
+#			 * @package App\Handler
+#			 */
+#			class AuthenticationHandler implements AuthenticationSuccessHandlerInterface, AuthenticationFailureHandlerInterface
+#			{
+#				/**
+#				 * @var RouterInterface
+#				 */
+#				private $router;
+#				/**
+#				 * @var Session
+#				 */
+#				private $session;
+#
+#
+#				/**
+#				 * AuthenticationHandler constructor.
+#				 * @param RouterInterface $router
+#				 * @param Session $session
+#				 */
+#				public function __construct(RouterInterface $router,/* Session $session*/ ContainerInterface $oContainer)
+#				{
+#					$this->router = $router;
+#					$this->_oContainer = $oContainer;
+##				}
+
+	#			/**
+#				 * @param Request $request
+#				 * @param TokenInterface $token
+#				 * @return JsonResponse|RedirectResponse
+#				 */
+#				public function onAuthenticationSuccess(Request $request, TokenInterface $token)
+#				{
+#
+#					if ($request->isXmlHttpRequest()) {
+#						$url = $this->router->generate('fos_user_profile_show');
+#						return new JsonResponse(array('success' => true));
+#					}
+#					else {
+#						$url = $this->router->generate('fos_user_profile_show');
+##						return new RedirectResponse($url);
+#					}
+#
+#				}
+#
+#				/**
+#				 * @param Request $request
+#				 * @param AuthenticationException $exception
+#				 * @return JsonResponse|RedirectResponse
+#				 */
+#				public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+#				{
+#					if ($request->isXmlHttpRequest()) {
+#						//$request->get('session')->set(Security::AUTHENTICATION_ERROR, $exception);
+#						$t = $this->_oContainer->get('translator');
+#						$sMessage = $t->trans($exception->getMessage(), [], null);
+#						return new JsonResponse(['success' => false, 'message' => $sMessage]);
+#					} else {
+#						$request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+#						return new RedirectResponse($this->router->generate('fos_user_security_login'));
+#					}
+#				}
+#			}
+		end
+		
+		def logoutHandler
+			#class LogoutHandler implements \Symfony\Component\Security\Http\Logout\LogoutHandlerInterface
+			# public function logout(Request $request, Response $response, TokenInterface $token);
+			#public function __construct(ContainerInterface $oContainer)
+			#	{
+			#		$this->_oContainer = $oContainer;
+			#		$this->session = $oContainer->get('request_stack')->getCurrentRequest()->getSession();
+			#	}
+		end
 	end
 end
