@@ -873,6 +873,23 @@ module Bundles
 			#	confirmation:
             #		enabled: true
 		end
+		
+		def registerUser
+			# Если форма регистрации одна, возможно правильнее будет декорировать контроллер, форму, шаблон
+			OverrideBundle.Controller
+			OverrideBundle.Form
+			OverrideBundle.FormTheme
+			OverrideBundle.View
+			
+			# Но можно создать учётку в контроллере вот так:
+			$oUserManager = $this->get('fos_user.user_manager');
+			$oUser = $oUserManager->createUser();
+            $oUser->setUsername($oRequest->get('username'));
+            $oUser->setEmail($oRequest->get('email'));
+            $oUser->setPlainPassword($oRequest->get('password'));
+            $oUser->setEnabled(true);
+            $oUserManager->updateUser($oUser);
+		end
 	end
 end
 
