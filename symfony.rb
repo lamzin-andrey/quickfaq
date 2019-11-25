@@ -503,6 +503,10 @@ module Translation
 		# see OverrideBundle.Translations.AnnotationAssertMessages
 		OverrideBundle.Translations.AnnotationAssertMessages
 	end
+	
+	def setDefaultTranslationInView
+		# {% trans_default_domain 'FOSUserBundle' %}
+	end
 end
 
 module FormBuilderInterface
@@ -574,6 +578,49 @@ module FormBuilderInterface
 			# А  NumberType выводится как input[type=text] - наверное им  (Symfony-стам) так надо.
 		end
 	end
+end
+
+# 3.4
+module FormType
+	class RoolFormType
+		def extend_s
+			# AbstractTyle
+		end
+		
+		def getName
+			return 'app.roolForm'
+		end
+		
+		def buildForm
+			#arg 0 FormBuilderInterface
+			FormBuilderInterface
+			#arg 1 array options
+		end
+	end
+	
+	class Controller
+		def postRequest
+		
+			#see RoolFormType
+			RoolFormType
+			# $oForm = $this->createForm(get_class(new RoolFormType()), new AppEntity());
+			
+		
+			#if ($oRequest->getMethod() == 'POST') {
+			#	$oForm->handleRequest($oRequest);
+			#	if ($oForm->isValid()) {
+			#		//TODO save data
+			#   	Например понадобилась дополнительная валидация, добавляем ошибку полю ввода	
+			#		$oError = new \Symfony\Component\Form\FormError('User already exists');
+			#		$vd = $oForm->get('phone')->addError($oError);
+			#	} else {
+			#		/** @var \Symfony\Component\Form\FormErrorIterator $errs */
+			#		$errs = $oForm->getErrors(true);
+			#	}
+			#}
+		end
+	end
+	
 end
 
 module OverrideBundle
@@ -881,7 +928,7 @@ module Bundles
 			OverrideBundle.FormTheme
 			OverrideBundle.View
 			
-			# Но можно создать учётку в контроллере вот так:
+			# Но можно создать учётку в контроллере и вот так:
 			$oUserManager = $this->get('fos_user.user_manager');
 			$oUser = $oUserManager->createUser();
             $oUser->setUsername($oRequest->get('username'));
