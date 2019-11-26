@@ -150,6 +150,10 @@ end
 module Test
   class Console
     def run
+		# 3.4
+		$ php bin/phpunit tests/Controller
+		
+		# 2.6
       # run all tests in the Utility directory
       $ phpunit -c app src/Acme/DemoBundle/Tests/Utility/
 
@@ -159,6 +163,41 @@ module Test
 	  # запустить все тесты для целого Bundle
 	  $ phpunit -c app src/Acme/DemoBundle/
     end
+  end
+  
+  class WebTestCase
+	def setUp
+		
+		#Access to db
+		
+		#static::$kernel = static::createKernel();
+		#static::$kernel->boot();
+		#$this->em = static::$kernel->getContainer()
+		#	->get('doctrine')
+		#	->getManager();
+		
+		#in test functiuon..
+		#$oRepository = $this->em->getRepository('App:Users');
+
+	end
+	
+	def getRepository
+		#see
+		setUp
+	end
+	
+	def getValueFromConfig
+		#see
+		setUp
+		# там есть доступ к контейнеру
+		# далее элементарно
+		# $this->_oContainer->getParameters('test')['[phone_number'];
+		
+		# при том что в services.yaml
+		# parameters:
+		# 	test:
+		#		phone_number: '89008521212'
+	end
   end
 end
 
