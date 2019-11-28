@@ -418,6 +418,7 @@ module Doctrine2
             ->andWhere('u.id = :id')
             ->setParameter('id', $nId)
             ->select('u.phone')
+            ->orderBy('u.id', 'DESC')
             ->getQuery()
             ->execute();
 	end
@@ -545,6 +546,77 @@ module Translation
 	
 	def setDefaultTranslationInView
 		# {% trans_default_domain 'FOSUserBundle' %}
+	end
+	class Controller
+		def trans
+			$this-translator->trans($s);
+			#domain is a filename with translations
+			$this->translator->trans($s, [], 'domain');
+		end
+	end
+	class Service
+		def trans
+			#container usually set in constructor from arg
+			$this->container->get('translator')->trans($s, [], 'domain');
+		end
+	end
+end
+
+module FileUpload
+	class Settings
+		def controller
+			$this->_oForm = $oForm = $this->createForm(get_class(new AdvertForm()), $this->_oAdvert, [
+				'request' => $oRequest,
+				'uploaddir' => $this->_subdir
+			]);
+		end
+		def buildForm
+			$a = [
+				'mapped'   => false,
+				'required' => false,
+				'label'    => $t->trans($this->_sFileInputLabel),
+				# Image or File. namespace Symfony\Component\Validator\Constraints\
+				# Image extends File
+				'constraints' => [new Image([
+					'mimeTypes' => [
+						'image/png',
+						'image/jpeg'
+					],
+					'maxSize' => '1024k',
+					'mimeTypesMessage' => 'Select image file!'
+				])]
+			];
+			$oBuilder->add('imagefile', FileType::class, $a);
+			#see also https://github.com/lamzin-andrey/gazelmesymfony34/blob/master/src/Service/FileUploaderService.php
+			# Using It more better for me.
+		end
+	end
+	def upload
+		#if ($this->_oForm->isValid()) {
+			#save file
+			
+			#						#see also Settings.buildForm
+			Settings.buildForm
+			
+			$oFile = $this->_oForm['imagefile']->getData();
+			#if ($oFile) {
+				$originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+				$safeFilename = $this->oContainer->get('App\Service\GazelMeService')->translite_url($originalFilename);
+				$fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+				#try {
+					$sFolder = $this->getTargetDirectory();
+					$file->move($sFolder, $fileName);
+				#} catch (FileException $e) {
+					$t = $this->translator;
+					$this->_sError = $t->trans('Unable upload file', [], 'Adform');
+					$this->_sErrorInfo = $e->getMessage();
+					$fileName = '';
+				#}
+				#if ($fileName)
+					$this->_oAdvert->setImageLink('/' . $this->_subdir . '/' . $fileName);
+			#}
+		#}
 	end
 end
 
@@ -953,6 +1025,118 @@ end
 # Sym 3.4
 
 module Bundles
+	class LiipImagineBundle
+		def install
+			# composer require liip/imagine-bundle
+			
+			# add in bindles.php 
+			# Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
+			
+			# create configuartion for Sumfony 3.4 see config_3_4
+			config_3_4
+			
+			#copy route file 
+			# cp vendor/liip/imagine-bundle/Resources/config/routing.yaml config/routes/liip_routes.yml
+		end
+		
+		def setMaxWidth
+			#configure filter
+			
+			#liip_imagine:
+#				filter_sets:
+#					cache: ~
+#					# name our second filter set "my_widen_filter"
+#					max_width:
+#						quality: 75
+#						filters:
+#							# use and setup the "relative_resize" filter
+#							relative_resize:
+#								# given 50x40px, output 32x26px using "widen" option
+#								widen: 240
+		end
+		
+		def setMaxHeight
+			# see setMaxWidth and use  heighten instead widen
+			setMaxWidth
+		end
+		
+		def config_3_4
+			#liip_imagine:
+			#	resolvers:
+			#		default:
+			#			web_path:
+			#				web_root: "%kernel.project_dir%/public"
+			#				cache_prefix: "images/cache"
+			#	loaders:
+			#		default:
+			#			filesystem:
+			#				data_root: "%kernel.project_dir%/public/"
+#
+#				driver:               "gd"
+#				cache:                default
+#				data_loader:          default
+#				default_image:        null
+#				controller:
+#					filter_action:         liip_imagine.controller:filterAction
+#					filter_runtime_action: liip_imagine.controller:filterRuntimeAction
+#
+#				filter_sets:
+#					cache: ~
+#
+#					# the name of the "filter set"
+#					my_thumb:
+#
+#						# adjust the image quality to 75%
+#						quality: 75
+#
+#						# list of transformations to apply (the "filters")
+#						filters:
+#
+#							# create a thumbnail: set size to 240x150 and use the "outbound" mode
+#							# to crop the image when the size ratio of the input differs
+#							thumbnail: { size: [240, 150], mode: outbound }
+#
+#							# create a 2px black border: center the thumbnail on a black background
+#							# 4px larger to create a 2px border around the final image
+#							#background: { size: [124, 94], position: center, color: '#000000' }
+#					
+#					# name our second filter set "my_widen_filter"
+#					max_width:
+#						quality: 75
+#						filters:
+#							# use and setup the "relative_resize" filter
+#							relative_resize:
+#								# given 50x40px, output 32x26px using "widen" option
+#								widen: 240
+#				#see also
+# https://symfony.com/doc/2.0/bundles/LiipImagineBundle/filters/sizing.html#relative-resize-options
+		end
+		
+		def callFromPhpClass
+			# 3.4
+			#target path must be absolute, for example '/opt/lampp/htdocs/site.local/www/images/2019/11/0.jpeg'
+			$tpath = $path;
+			$container = $this->oContainer;                                  
+			$oRequest = $container->get('request_stack')->getCurrentRequest();
+			$sDr = $oRequest->server->get('DOCUMENT_ROOT');
+			
+			#source path must be "web" path, for example '/images/2019/11/0.jpeg'
+			$path = str_replace($sDr, '', $tpath);
+			
+			$dataManager = $container->get('liip_imagine.data.manager');    // the data manager service
+			#/** @var \Liip\ImagineBundle\Imagine\Filter\FilterManager $filterManager  */
+			$filterManager = $container->get('liip_imagine.filter.manager');// the filter manager service
+			
+			$image = $dataManager->find($filter, $path);                    // find the image and determine its type
+			$response = $filterManager->applyFilter($image, $filter);
+			//$response = $filterManager->get($this->getRequest(), $filter, $image, $path); // run the filter 
+			$thumb = $response->getContent();                               // get the image from the response
+
+			$f = fopen($tpath, 'w');                                        // create thumbnail file
+			fwrite($f, $thumb);                                             // write the thumbnail
+			fclose($f);                                                     // close the file
+		end
+	end
 	class FOSUserBundle
 		def RegistrationEmailConfirm
 			# registration:
@@ -1336,5 +1520,11 @@ module Security
 			#		$this->session = $oContainer->get('request_stack')->getCurrentRequest()->getSession();
 			#	}
 		end
+	end
+end
+module ImageResize
+	def ImageResize
+		#see LiipImagineBundle
+		LiipImagineBundle
 	end
 end
