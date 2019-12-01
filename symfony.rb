@@ -413,6 +413,24 @@ module Doctrine2
         #Also ->getSingleResult() #return array, result in zero position
 	end
 	
+	def group_concat
+		# composer require beberlei/doctrineextensions
+		
+		# file config/packages/doctrine.yaml
+		#dql:
+		#  string_functions:
+		#	group_concat: DoctrineExtensions\Query\Mysql\GroupConcat
+	end
+	
+	def rand
+		# composer require beberlei/doctrineextensions
+		
+		# file config/packages/doctrine.yaml
+		#dql:
+		#  numeric_functions:
+		#	rand: DoctrineExtensions\Query\Rand
+	end
+	
 	def getCollectionOfEntities
 		$aPhones = $oRepository->createQueryBuilder('u')
             ->andWhere('u.id = :id')
