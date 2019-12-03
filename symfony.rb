@@ -1545,3 +1545,112 @@ module ImageResize
 		LiipImagineBundle
 	end
 end
+
+module BundleOverride
+	#see OverrideBundle
+	OverrideBundle
+end
+module BundleCreate
+	#after install from composer path: vendor/landlib/symfonytoolsbundle/SymfonyToolsBundle
+	class Bundle
+#
+#		namespace Landlib\SymfonyToolsBundle;
+#
+
+#		use Symfony\Component\DependencyInjection\ContainerBuilder;
+#		use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+#		/**
+#		 * @author Lamzin Andrey<lamzin.an@gmail.com>
+#		 */
+#		class SymfonyToolsBundle extends Bundle
+#		{
+#			/**
+#			 * @param ContainerBuilder $container
+#			 */
+#			public function build(ContainerBuilder $container)
+#			{
+#				parent::build($container);
+#			}
+#		}
+	end
+	class Command
+		def config
+			#Resources/config/commands.xml
+		#	<?xml version="1.0" encoding="UTF-8" ?>
+
+		#	<container xmlns="http://symfony.com/schema/dic/services"
+		#		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		#		xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+#
+#				<services>
+#					<service id="landlib_symfony_tools.command.decorate_controller" class="Landlib\SymfonyToolsBundle\Command\DecorateControllerCommand">
+#						<tag name="console.command" command="landlib:decorate-controller" />
+#					</service>
+#				</services>
+#
+#			</container>
+
+		end
+	end
+	class Service
+		def DependencyInjection
+			# create classes Configuration and XXExtension
+			# if Configuration load 
+			$treeBuilder->root('symfony_tools');
+			#  than 'XXExtension' will 'SymfonyToolsExtension'
+		end
+		
+		def Configuration
+
+			#namespace Landlib\SymfonyToolsBundle\DependencyInjection;
+
+			#use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+			#use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+			#class Configuration implements ConfigurationInterface
+			#{
+			#	public function getConfigTreeBuilder()
+			#	{
+			#		$treeBuilder = new TreeBuilder();
+			#		$treeBuilder->root('symfony_tools');
+			#		return $treeBuilder;
+			#	}
+			#}
+		end
+		
+		def XXExtension
+
+			#namespace Landlib\SymfonyToolsBundle\DependencyInjection;
+
+			#use Symfony\Component\Config\FileLocator;
+			#use Symfony\Component\DependencyInjection\ContainerBuilder;
+			#use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+			#use Symfony\Component\DependencyInjection\Loader;
+
+			#class SymfonyToolsExtension extends Extension
+			#{
+			#	/**
+			#	 * {@inheritdoc}
+			#	 */
+			#	public function load(array $configs, ContainerBuilder $container)
+			#	{
+			#		$configuration = new Configuration();
+			#		$this->processConfiguration($configuration, $configs);
+#
+#					$loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+#					$loader->load('services.yml');#
+#				}
+#			}
+		end
+		
+		def config_yml
+			#file vendor/ [...] /Resources/config/services.yml
+			
+			#services:
+			#	Landlib\SymfonyToolsBundle\Service\FileUploaderService:
+			#		arguments: ["@service_container"]
+			#		class: Landlib\SymfonyToolsBundle\Service\FileUploaderService
+		end
+	end
+end
