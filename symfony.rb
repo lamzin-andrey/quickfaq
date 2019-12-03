@@ -435,7 +435,6 @@ module Doctrine2
 		$aPhones = $oRepository->createQueryBuilder('u')
             ->andWhere('u.id = :id')
             ->setParameter('id', $nId)
-            ->select('u.phone')
             ->orderBy('u.id', 'DESC')
             ->getQuery()
             ->execute();

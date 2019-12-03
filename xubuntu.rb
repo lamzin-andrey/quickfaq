@@ -182,4 +182,12 @@ module Xubuntu
 			#avconv -i input.mp4 -vn -c:a libmp3lame -q:a 2 output.mp3
 		end
 	end
+	
+	class PhpStormReinstall
+	    # Консольный скрипт не юзаем
+	    # $USER/.local/share/  тут что-то было
+	    # $USER/.config - всегда глядим
+	    # $USER/.phpstorm - было
+	    #
+	end
 end
