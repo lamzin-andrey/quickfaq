@@ -744,9 +744,29 @@ module FormType
 			#	} else {
 			#		/** @var \Symfony\Component\Form\FormErrorIterator $errs */
 			#		$errs = $oForm->getErrors(true);
+			#       $aErrors = getFormErrorsAsArray($oForm);
 			#	}
 			#}
 		end
+		def getFormErrorsAsArray #(FormInterface $oForm) : array
+
+			$aResult = [];
+			$nSz = $oForm->getErrors(true)->count();
+			#if ($nSz) {
+				$oCurrentError = $oForm->getErrors(true)->current();
+				$sKey = $oCurrentError->getOrigin()->getConfig()->getName();
+				$sMessage = $oCurrentError->getMessage();
+				$aResult[$sKey] = $sMessage;
+			#}
+			#for ($i = 0; $i < $nSz - 1; $i ++) {
+				$oCurrentError = $oForm->getErrors(true)->next();
+				$sKey = $oCurrentError->getOrigin()->getConfig()->getName();
+				$sMessage = $oCurrentError->getMessage();
+				$aResult[$sKey] = $sMessage;
+			#}
+			return $aResult;
+		end
+	
 	end
 	
 end
@@ -1654,3 +1674,14 @@ module BundleCreate
 		end
 	end
 end
+module Cache
+	def Db
+		#see Doctrine2.queryCache and 
+		Doctrine2.queryCache
+		Doctrine2.Memcache
+	end
+	def getVarCacheFilePath
+		#$file =  $this->getParameter('kernel.cache_dir') . '/file.cache';
+	end
+end
+
