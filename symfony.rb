@@ -1,4 +1,15 @@
 module Console
+  def createEntitiesFromDb
+	#Sym5m Sum 3.4
+	#
+	# достаточно сконфигурировать .env файл:
+	#
+	# DATABASE_URL=mysql://andrey:123456@127.0.0.1:3306/databasename
+	#
+	# php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Entity
+	# php bin/console make:entity --regenerate App
+	#
+  end
   def createBundle #Как сгенерить бандл генерация бандла 
 	# 2.6
     #php app/console generate:bundle --namespace=Acme/HelloBundle
@@ -498,6 +509,20 @@ module Repository
 end
 
 module Twig
+	class MyTricks
+		def mainErrors
+			#{% block vuepageerror %}{% endblock %}
+			#{% for label, messages in app.flashes %}
+			#    {% for message in messages %}
+			#        {% if (label == 'notice') %}
+			#            <div class="alert alert-danger">{{ message|raw }}</div>
+			#        {% else %}
+			#            <div class="alert alert-success">{{ message|raw }}</div>
+			#        {% endif %}
+			#    {% endfor %}
+			#{% endfor %}
+		end
+	end
 	class twigVariable
 		def ifdefined
 			#if ( nIspage100Percents is defined )
@@ -565,8 +590,13 @@ module Translation
 		# {% trans_default_domain 'FOSUserBundle' %}
 	end
 	class Controller
+		# sym 5
+		# fooAction(Request $req, TranslatorInterface $t)
+		$this->translator = $t;
+		
+		# sym 3
 		def trans
-			$this-translator->trans($s);
+			$this->translator->trans($s);
 			#domain is a filename with translations
 			$this->translator->trans($s, [], 'domain');
 		end
