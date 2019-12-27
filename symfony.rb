@@ -820,7 +820,27 @@ module OverrideBundle
 			# доступна переменная-массив block_prefixes и один из его элементов 
 			# позволяет определить тип инпута, например он равен checkbox если в конструкторе формы
 			# использовался CheckboxType
+			
+			# В config/packages/twig.yaml
+			# указать
+			#twig:
+			#	form_themes:  ['form/layout.html.twig']
+			#
 		end
+		
+		def local
+			# see Global
+			# Но вместо правки config/packages/twig.yaml
+			#
+			# добавляем в начало шаблона
+			#
+			#{% form_theme form with [
+			#	'form_div_layout.html.twig',
+			#	'form/layout.html.twig'
+			#] %}
+			#
+			#
+		end 
 	end
 	
 	class View
