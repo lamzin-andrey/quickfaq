@@ -234,6 +234,14 @@ module Migration
 end
 
 module Entity
+	class Validator
+		def Password
+			# Пароль в верхнем и нижнем регистре
+			#@Assert\Regex(pattern = "/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/s", message="Password must containts symbols in upper and lower case and numbers")
+			
+			
+		end
+	end
 	class Datetime
 		def created_at
 			#Для работы с датой и временем сущности в Doctrine используй поля created_at
@@ -509,6 +517,28 @@ module Repository
 end
 
 module Twig
+
+	class twigExtension
+		def classHeader
+			#namespace App\Twig;
+
+			#use \Symfony\Component\DependencyInjection\ContainerInterface;
+			#use Symfony\Contracts\Translation\TranslatorInterface;
+			#use Twig\TwigFilter;
+
+			#class AppExtension extends \Twig\Extension\AbstractExtension
+		end
+		
+		def getFilters 
+			return [
+				# Просто добавь эти методы
+				#new TwigFilter('get_loginform_input_css', array($this, 'getLoginformInputCss')),
+				#new TwigFilter('rouble', array($this, 'roubleFilter')),
+			];
+		end
+	}
+	end
+	
 	class MyTricks
 		def mainErrors
 			#{% block vuepageerror %}{% endblock %}
@@ -523,6 +553,7 @@ module Twig
 			#{% endfor %}
 		end
 	end
+	
 	class twigVariable
 		def ifdefined
 			#if ( nIspage100Percents is defined )
@@ -709,6 +740,14 @@ module FormBuilderInterface
 			#Можно указать имя файла с трансляцией (например FOSUserBundle, если существует файл 
 			#  translations/FOSUserBundle.ru.yml)
 			# Чтобы использовать messages.ru.yaml указать null
+		end
+		
+		def constraints
+			# Это массив, его элементом может быть например
+			#new Regex([
+			#				'pattern' => "/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/s",
+			#				'message' => 'Password must containts symbols in upper and lower case and numbers'
+			#			])
 		end
 	end
 	
@@ -1225,6 +1264,9 @@ module Bundles
 		end
 	end
 	class FOSUserBundle
+		def CreateAdmin
+			#bin/console fos:user:create username admin@test.com **** --super-admin
+		end
 		def RegistrationEmailConfirm
 			# registration:
 			#	confirmation:

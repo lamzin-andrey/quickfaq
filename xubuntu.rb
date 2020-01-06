@@ -185,9 +185,9 @@ module Xubuntu
 	
 	class PhpStormReinstall
 	    # Консольный скрипт не юзаем
-	    # $USER/.local/share/  тут что-то было
-	    # $USER/.config - всегда глядим
-	    # $USER/.phpstorm - было
+	    # $HOME/.local/share/  тут что-то было
+	    # $HOME/.config - всегда глядим
+	    # $HOME/.phpstorm - было
 	    #
 	end
 end
