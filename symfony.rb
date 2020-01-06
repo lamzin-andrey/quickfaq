@@ -99,6 +99,14 @@ module Controller
     # ->has();  -> get();   -> set(); (?)
   end
   
+  def jsonRequestRead
+	#$data = json_decode($oRequest->getContent(), true);
+  end
+  
+  def requestReadJSON
+	jsonRequestRead
+  end
+  
   def requestMethod
 	$request->getMethod();
   end
