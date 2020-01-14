@@ -163,6 +163,17 @@ module Controller
 		# и возвращаем в контроллере
 		return $this->_json(array('list' => $data));
     end
+    
+    def setCookie
+		#$oCookie = Cookie::create(name, value, time() + 3600);
+		#new Response()->setCookie($oCookie);
+    end
+  end
+  
+  class Request
+	def Cookie
+		#$oRequest->cookies->get('cookie_name');
+	end
   end
 end
 
@@ -678,6 +689,11 @@ module FileUpload
 		end
 	end
 	def upload
+	    #$oForm->handleRequest($oRequest);
+	    # или, если handleRequest ни в какую не работает (check if an unsubmitted form is valid), 
+	    #$oForm->submit(['_token' => $oRequest->get('form_name')['_token'],
+	    # 				 '_file' =>  $oRequest->files->get('form_name')['_file']]);
+	    
 		#if ($this->_oForm->isValid()) {
 			#save file
 			
@@ -1785,3 +1801,8 @@ module Cache
 	end
 end
 
+module Cookies
+	#see Controller.Request.Cookie and Controller.Response.setCookie
+	Controller.Request.Cookie
+	Controller.Response.setCookie
+end
