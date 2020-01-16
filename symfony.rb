@@ -43,11 +43,17 @@ module Console
   
 		## Это создаст каталог s3.loc/www/app/DoctrineMigrations/
     #php app/console doctrine:migrations:status --show-versions
+    
+    
 		## Это создаст файл миграции в s3.loc/www/app/DoctrineMigrations/
-    #php app/console doctrine:migrations:generate
+    #php bin/console doctrine:migrations:generate
+		## Выполнить все
+		# php bin/console doctrine:migrations:migrate
 		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой 
 		 #php app/console doctrine:migrations:status --show-versions
     #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
+    
+    
   end
   
   def createApp
@@ -57,6 +63,10 @@ module Console
 end
 
 module Configuration
+  def valueFromEnvFile
+	#3.4 - 5.0.2
+	#app.y: "%env(resolve:ENV_FILE_PARAMETER_Y)%"
+  end
   def mainConfigName
 	# 2.6
     #app/config/parameters.yml
@@ -231,6 +241,19 @@ module Test
   end
 end
 
+module Log
+	def writeLog
+		# Sym 5
+		# arg LoggerInterface $oLog
+		# $aLogCtx = ['context' => 'sms']
+		# $oLog->info("\nhash = {$hash}\n\n" , $aLogCtx);
+	end
+	
+	def whereLog
+		# var/log/dev|prod.log
+	end
+end
+
 module Migration
 	def addSql
 		#$this->addSql("NATIVE SQL QUERY");
@@ -249,6 +272,11 @@ module Migration
 		
 		#//add setContainer method
 		#public function setContainer(ContainerInterface $container = null);
+	end
+	
+	def console
+	  #see Console.migration
+	  Console.migration
 	end
 end
 
