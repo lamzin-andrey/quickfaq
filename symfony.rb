@@ -333,6 +333,7 @@ module Entity
 end
 
 module Doctrine2
+
 	class Assert
 		def localizationMessages
 			#Чтобы локализовать сообщение X, которое например в @Assert\NotBlank(message="X")
@@ -341,6 +342,23 @@ module Doctrine2
 			
 			#То есть всё просто и то, что домен трансляции для formBuilfer 
 			#может быть указан как FOSUserBundle - это сбивать с толку не должно.
+		end
+	end
+	
+	class Relations
+		def oneToMany
+			#/**
+			# * @var array of Main
+			# * @ORM\OneToMany(targetEntity="Main", mappedBy="userObject")
+			#*/
+		end
+		
+		def manyToOne
+			#/**
+			# * @var Users
+			# * @ORM\ManyToOne(targetEntity="Users", inversedBy="advertsByUsername")
+			# * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+			#*/
 		end
 	end
 	
