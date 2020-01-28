@@ -1,4 +1,42 @@
 module Console
+  class Command
+	def example
+		#namespace App\Command;
+
+		#use App\Service\AppService;
+		#use Symfony\Component\Console\Command\Command;
+		#use Symfony\Component\Console\Input\InputInterface;
+		#use Symfony\Component\Console\Output\OutputInterface;
+		#use Landlib\SimpleMail;
+		#use Symfony\Component\DependencyInjection\ContainerInterface;
+
+		#class CheckPhdMessagesCommand extends Command
+		#{
+			#// the name of the command (the part after "bin/console")
+			#protected static $defaultName = 'app:check_phd';
+
+
+			#public function __construct($name = null, AppService $oAppService, ContainerInterface $oContainer)
+			#{
+				#$this->_oContainer = $oContainer;
+				#$this->_oAppService = $oAppService;
+				#parent::__construct(static::$defaultName);
+			#}
+
+			#protected function configure()
+			#{
+
+			#}
+
+			#protected function execute(InputInterface $input, OutputInterface $output)
+			#{
+
+				#return 0;
+			#}
+
+		#}
+	end
+  end
   def createEntitiesFromDb
 	#Sym5m Sum 3.4
 	#
