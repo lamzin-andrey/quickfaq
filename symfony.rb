@@ -499,6 +499,48 @@ module Doctrine2
         
         #3 Использовать Criteria и EntityRepository::matching для получения результатов
         #4 Если это невозможно, вызывать QueryBuilder::setCacheable(true)
+        
+        #А ещё есть кэш первого уровня
+        #$aCollection = $oQueryBuilder->getQuery()->enableResultCache(3600)->getResult();
+        #вот так вот используется.
+        
+        #конфигурируется пока так
+        
+        #config/packages/doctrine.yaml
+        
+        #result_cache_driver:
+            #type: memcached
+            #host: localhost
+            #port: 11211
+            #instance_class: Memcached
+            
+        #но это уже устарело, надо так:
+        
+        #result_cache_driver:
+            #type: 'service'
+            #id: doctrine.cache.memcached
+            
+        #А чтобы это заработало, вам надо в файле config/services.yaml:
+        
+        #в секции parameters
+        
+        #memcached.servers:
+			#- memcached://localhost:11211
+        #memcached.config: {distribution: 'consistent', compression: true}
+        
+        #в секции services
+        
+        
+       #memcached.doctrine:
+		  #class: Memcached
+		  #factory: Symfony\Component\Cache\Adapter\MemcachedAdapter::createConnection
+		  #arguments: ['%memcached.servers%', '%memcached.config%']
+
+	  #doctrine.cache.memcached:
+		#class: Doctrine\Common\Cache\MemcachedCache
+		#calls:
+		  #- [ setMemcached, [ '@memcached.doctrine' ] ]
+
 	end
 	def Datetime
 		@see Entity.Datetime.created_at
