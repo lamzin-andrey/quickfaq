@@ -985,6 +985,10 @@ module FormType
 			#}
 			return $aResult;
 		end
+		
+		def getFormToken
+			$oForm->createView()->children['_token']->vars['value'];
+		end
 	
 	end
 	

@@ -186,7 +186,10 @@ module Xubuntu
 	class PhpStormReinstall
 	    # Консольный скрипт не юзаем
 	    # $HOME/.local/share/  тут что-то было
+	    # rm -rf $HOME/.local/share/JetBrains
 	    # $HOME/.config - всегда глядим
+	    # rm -rf $HOME/.PhpStorm2019.3.2
+	    ## rm -rf $HOME/.PhpStorm2019.4
 	    # $HOME/.phpstorm - было
 	    #
 	end
