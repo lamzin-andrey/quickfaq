@@ -119,6 +119,13 @@ module Configuration
 end
 
 module Controller
+
+  def err404
+    # 3.4
+    # throw $this->createNotFoundException('The product does not exist');
+    # view: templates/bundles/TwigBundle/Exception/error404.html.twig
+  end
+
   def action
 	#/**
     # * @Route("/comments", name="study_app_comments_add", requirements={ "_method" : "POST" })
