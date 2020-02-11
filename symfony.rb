@@ -1467,6 +1467,7 @@ module Bundles
 			#bin/console fos:user:create username admin@test.com **** --super-admin
 		end
 		def RegistrationEmailConfirm
+			# config/packages/fos_user.yml
 			# registration:
 			#	confirmation:
             #		enabled: true
