@@ -1350,6 +1350,180 @@ end
 # Sym 3.4
 
 module Bundles
+	# Sym 3.4
+	class HWIOAuthBundle
+		# Сначала надо установить FOSUserBundle
+		#Пробовал пока только авторизацию через facebook
+		#По сути всё как в доке https://github.com/hwi/HWIOAuthBundle
+		# но её не хватило, поэтому вот всё
+		
+		def securityYaml
+			#main:
+				#...
+				#oauth:
+					#resource_owners:
+						#facebook:           "/login/login_facebook"
+						##google:             "/login/check-google"
+						##my_custom_provider: "/login/check-custom"
+						##my_github:          "/login/check-github"
+					#login_path:        /login
+					#use_forward:       false
+					#failure_path:      /login
+
+					#oauth_user_provider:
+						##it's the custom user provider. It will be registered as service
+						#service: wannaplay_user_provider
+			#############################################
+			
+			# it root section!
+			#hwi_oauth: # it root section!
+				## list of names of the firewalls in which this bundle is active, this setting MUST be set
+				##firewall_names: [secured_area]
+				#connect:
+					#account_connector: wannaplay_user_provider #it my custom provider
+				#firewall_names: [main]
+
+				#resource_owners:
+					#facebook:
+						#type:                facebook
+						#client_id:           9***1
+						#client_secret:       a9***23a
+
+				#fosub:
+					## try 30 times to check if a username is available (foo, foo1, foo2 etc)
+					#username_iterations: 30
+
+					## mapping between resource owners (see below) and properties
+					#properties:
+						#facebook: facebook_id
+		end
+		
+		def servicesYaml
+			#wannaplay_user_provider:
+			##class: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
+			#class: App\Provider\OAuthUserProvider #it my custom!
+			##this is the place where the properties are passed to the UserProvider - see config.yml
+			#arguments: ['@fos_user.user_manager',{facebook: facebookID}] #facebookID - it field in User Entity!
+		end
+		
+		def routesYaml
+			#hwi_oauth_redirect:
+			  #resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+			  #prefix:   /connect
+
+
+
+			#hwi_oauth_connect:
+			  #resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+			  #prefix:   /connect
+
+			#hwi_oauth_login:
+			  #resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+			  #prefix:   /login
+
+			#facebook_login:
+			  #path: /login/login_facebook
+		end
+		
+		def configBundlesPhp
+			#Http\HttplugBundle\HttplugBundle::class => ['all' => true],
+			#HWI\Bundle\OAuthBundle\HWIOAuthBundle::class => ['all' => true]
+		end
+		
+		def twigTemplate
+			#<a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}">
+				#<span>Login with Facebook</span>
+			#</a>
+		end
+		
+		def UserEntity
+			#/**
+			 #* @var string
+			 #*
+			 #* @ORM\Column(name="facebook_id", type="string", nullable=true)
+			 # */
+			#private $facebookID;
+
+			#/** @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) */
+			#protected $facebook_access_token;
+			
+			#getsetFacebookId
+			#getsetFacebookAccessToken
+		end
+		
+		def provider
+			#namespace App\Provider;
+
+			#use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+			#use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
+			#use Symfony\Component\Security\Core\User\UserInterface;
+
+			#class OAuthUserProvider extends BaseClass
+			#{
+				#/**
+				 #* {@inheritDoc}
+				#*/
+				#public function connect(UserInterface $user, UserResponseInterface $response)
+				#{
+					#$property = $this->getProperty($response);
+					#$username = $response->getUsername();
+					#//on connect - get the access token and the user ID
+					#$service = $response->getResourceOwner()->getName();
+					#$setter = 'set'.ucfirst($service);
+					#$setter_id = $setter.'Id';
+					#$setter_token = $setter.'AccessToken';
+					#//we "disconnect" previously connected users
+					#if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
+						#$previousUser->$setter_id(null);
+						#$previousUser->$setter_token(null);
+						#$this->userManager->updateUser($previousUser);
+					#}
+					#//we connect current user
+					#$user->$setter_id($username);
+					#$user->$setter_token($response->getAccessToken());
+					#$this->userManager->updateUser($user);
+				#}
+				#/**
+				 #* {@inheritdoc}
+				#*/
+				#public function loadUserByOAuthUserResponse(UserResponseInterface $response)
+				#{
+					#$username = $response->getUsername();
+					#$user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+
+					#//If user not exist create user and return it
+					#if (null === $user) {
+						#$service = $response->getResourceOwner()->getName();
+						#$setter = 'set'.ucfirst($service);
+						#$setter_id = $setter.'Id';
+						#$setter_token = $setter.'AccessToken';
+
+						#// create new user here
+						#$user = $this->userManager->createUser();
+						#$user->$setter_id($username);
+						#$user->$setter_token($response->getAccessToken());
+						#$user->setUsername( $response->getRealName());
+						#$user->setEmail($response->getEmail());
+						#$user->setPassword($username);
+						#$user->setEnabled(true);
+						#$this->userManager->updateUser($user);
+
+						#return $user;
+					#}
+
+					#//if user exists - go with the HWIOAuth way
+					#$user = parent::loadUserByOAuthUserResponse($response);
+					#$serviceName = $response->getResourceOwner()->getName();
+					#$setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+
+					#//update access token
+					#$user->$setter($response->getAccessToken());
+					#return $user;
+				#}
+			#}
+		end
+	end
+
 	class LiipImagineBundle
 		def install
 			# composer require liip/imagine-bundle
