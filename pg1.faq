@@ -1,8 +1,8 @@
-(apt-get install postgresql-9.1 libpq-dev postgresql-plperl-9.1)
+(apt-get install postgresql-10 libpq-dev postgresql-plperl-10)
 
-sudo apt-get install postgresql-9.1/-client/-server-dev
+sudo apt-get install postgresql-10/-client/-server-dev
 #sudo apt-get install libpgq5  (если сам не установится)
-sudo apt-get install postgresql-9.1-plproxy
+sudo apt-get install postgresql-10-plproxy
 sudo apt-get install skytools
 также ставим memcached
 -----------------------------------------------------------------------------------------
@@ -32,24 +32,37 @@ psql (9.3.9)
 Type "help" for help.
 
 
-postgres=# CREATE USER andrey;
+postgres=# CREATE USER demo;
 CREATE ROLE
-postgres=# ALTER USER andrey password '123';
+postgres=# ALTER USER demo password '123';
 ALTER ROLE
-postgres=# ALTER ROLE  andrey WITH superuser;
+postgres=# ALTER ROLE  demo WITH superuser;
 ALTER ROLE
 
 
 ---------------------------------------------------------------------------------------------
 Как установить локаль win1251?
-Файл /var/lib/locales/supported.d/local
+Файл /var/lib/locales/supported.d/local/ru
 Добавляем в него:
 ru_RU.CP1251 CP1251
+
 После чего запускаем sudo locale-gen
 если все ок
+
 su postgres
+psql
+SHOW data_directory;
+# тут покажет путь, например /var/lib/postgresql/10/main
+
+\q
+
+#тут test потому что уже занято
+/home/andrey$ /usr/lib/postgresql/10/bin/initdb -D /var/lib/postgresql/10/test  --locale=ru_RU.CP1251
+
+## olds 
 /etc/init.d/postgresql initdb -D /usr/local/pgsql/data --locale=ru_RU.UTF-8
 (?) /etc/init.d/postgresql initdb -D /usr/local/pgsql/data --locale=ru_RU.CP1251
+sudo service postgresql initdb -D /usr/local/pgsql/data --locale=ru_RU.CP1251
 
 --------------------------------------------------------------------------------------------------
 Как создать базу из консоли под этим пользователем?
@@ -79,10 +92,10 @@ psql -c "SELECT la_joinfuncton();" -d freelance2 -U demo > /home/andrey/storedpr
 
 psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d база -U суперюзер
 
-psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance2 -U demo
-psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_proxy -U demo
-psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data1 -U demo
-psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data2 -U demo
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance2 -U postgres
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_proxy -U postgres
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data1 -U postgres
+psql --single-transaction -c "UPDATE pg_language SET lanpltrusted = true WHERE lanname = 'c';" -d freelance_data2 -U postgres
 
 
 
@@ -94,18 +107,18 @@ psql -c "GRANT USAGE ON LANGUAGE c TO юзер;" -d база -U суперюзе
 psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance2 -U postgres
 psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_proxy -U postgres
 psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_data1 -U postgres
-psql -c "GRANT USAGE ON LANGUAGE c TO demo;" -d freelance_data2 -U postgres
+psql -c "GRANT USAGE ON LANGUAGE c TO andredemo;" -d freelance_data2 -U postgres
 
 ---------------------------------------------------------------------------------------------------
 Как импортировать данные?
 
 su xwin #!! то есть импортируем все под основным пользователем, не под пользователем postgres !!!!
 
-/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance2" --verbose "/home/andrey/freelance2.bin"
-/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_stat" --verbose "/home/andrey/freelance_stat.bin"
-/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data1" --verbose "/home/andrey/freelance_data1.bin"
-/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data2" --verbose "/home/andrey/freelance_data2.bin"
-/usr/lib/postgresql/9.1/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_proxy" --verbose "/home/andrey/freelance_proxy.bin"
+/usr/lib/postgresql/10/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance2" --verbose "/home/andrey/freelance2.bin"
+/usr/lib/postgresql/10/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_stat" --verbose "/home/andrey/freelance_stat.bin"
+/usr/lib/postgresql/10/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data1" --verbose "/home/andrey/freelance_data1.bin"
+/usr/lib/postgresql/10/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_data2" --verbose "/home/andrey/freelance_data2.bin"
+/usr/lib/postgresql/10/bin/pg_restore --host=localhost --port=5432 --username="demo" --dbname="freelance_proxy" --verbose "/home/andrey/freelance_proxy.bin"
 
 * После импорта выполняем запросы из файлов D/backup/free-lance.back/functions+pg - а может быть и обойдемся ))
 
@@ -227,7 +240,8 @@ vboxnet0  Link encap:Ethernet  HWaddr 0a:00:27:00:00:00
 
 ---------------------------------------------------------------------------------------------
 Как перезапустить postgres из консоли?
-/sudo/etc/init.d/postgresql restart
+sudo service postgresql restart
+# old ubuntu sudo /etc/init.d/postgresql restart
 
 
 Как обновить сжатый скрипт на бете  - выполнить http://beta.free-lance.ru/test/static_version.php
