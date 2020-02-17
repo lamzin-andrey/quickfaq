@@ -1,6 +1,24 @@
 <?php
 
 public function setConnection() {
+	//2020
+	$manager = new MongoDB\Driver\Manager("mongodb://127.0.0.1:27017");
+	$filter = ['id' => 2];
+	$options = [];
+	/*$options = [
+		'projection' => ['_id' => 0],
+		'sort' => ['x' => -1],
+	];*/
+	$query = new MongoDB\Driver\Query($filter, $options);
+	$cursor = $manager->executeQuery('hello2020.goods', $query);
+	
+
+	foreach ($cursor as $entry) {
+		var_dump($entry);
+	}
+	die
+	
+	//old
     $config = array(
     'test' => array(
         'ip'   => '192.168.0.247',
