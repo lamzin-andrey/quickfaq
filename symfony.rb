@@ -512,6 +512,15 @@ module Doctrine2
 		$aCollection = $repository->matching($oCriteria)->toArray();
 	end
 	
+	def rawSql
+		$oEm = $this->getDoctrine()->getEntityManager();
+	    $sQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
+					GROUP BY (m.phone)';
+		$statement = $oEm->getConnection()->prepare($sQuery);
+        $statement->execute();
+	end
+	
+	
 	def queryCache
 		#1 Включить кеш второго уровня в config/packages/doctrine.yaml
 		# doctrine:
