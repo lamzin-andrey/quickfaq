@@ -738,6 +738,15 @@ end
 
 module Twig
 
+	class Syntax
+		def _for
+			#{% for aInterval in aIntervals %}
+			#{{  aInterval|render_interval(oTree, oTask) }}
+			#endfor
+		end
+	end
+	
+	
 	class twigExtension
 		def classHeader
 			#namespace App\Twig;
