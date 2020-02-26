@@ -120,6 +120,15 @@ end
 
 module Controller
 
+  def csrf
+	$this->isCsrfTokenValid('tokenid');
+	# in view
+	# {{ csrf_token('tokenid') }}
+	
+	#also see
+	FormType.Controller.getFormToken;
+  end
+
   def GoogleReCaptcha
 	#(^1.2)
 	# composer require google/recaptcha 
@@ -372,6 +381,18 @@ module Entity
 			
 		end
 	end
+	
+	def UniqueEntity
+		def annotation
+			#@ORM\Table(name="crn_task_tags", uniqueConstraints={
+		         #@UniqueConstraint(name="tagtask_unique",
+		             #columns={"tag_id", "task_id"})
+		     #})
+			#@ORM\Entity
+			#@UniqueEntity(fields={"taskId", "tagId"})
+		end
+	end
+	
 	class Datetime
 		def created_at
 			#Для работы с датой и временем сущности в Doctrine используй поля created_at
