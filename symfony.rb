@@ -738,6 +738,14 @@ end
 
 module Twig
 
+	def themesFromBox
+		# Sym 5.0.2
+		'bootstrap_4_layout.html.twig'
+		#twig:
+			#form_themes:  ['bootstrap_4_layout.html.twig']
+		
+	end
+
 	class Syntax
 		def _for
 			#{% for aInterval in aIntervals %}
@@ -827,7 +835,7 @@ module Twig
 	end
 		
 	def link
-		see_route
+		see route
 	end
 	
 	def overrideBundleViewFile
