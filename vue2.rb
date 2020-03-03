@@ -12,3 +12,17 @@ class Axios
 	def postFormData
 	end
 end
+
+class ConfigApp
+	def setSquareBracketsInstead
+		window.app = new Vue({
+			delimiters : ['[[', ']]']
+		});
+	end
+	
+	def setTokens
+		#see
+		setSquareBracketsInstead
+	end
+	
+end
