@@ -831,7 +831,8 @@ module Twig
 	end
 		
 	def route
-		#< ahref="{{path('My_route')}}" >Link</a>
+		#@Route("admin/automoderation/{slug}", name="blog_post")
+		#<a href="{{ path('blog_post', {slug: post.slug}) }}" >Link</a>
 	end
 		
 	def link
