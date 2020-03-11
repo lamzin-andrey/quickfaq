@@ -16,9 +16,11 @@ end
 
 def enterInContainerShell
 	#Тут почти всегда работает
+	
+	# [sudo] docker ps
 	# sudo docker run -it IMAGE_NAME bash
+	# sudo docker run -it forecatsservice_php bash
 	# IMAGE_NAME можно видеть в 3
-	# sudo docker ps
 	
 	# Но если контейнеру была нужна сборка (в файле docker-composer.yml есть строка build: ./docker/apache)
 	# вам возможно придётся использовать sh:
@@ -58,4 +60,28 @@ end
 
 def networkList
 	# sudo docker network ls
+end
+
+def mysqlConnect
+	# На практике не использовалось, но интересно
+	# Источник https://qna.habr.com/q/466230
+	
+	#Создайте группу docker, если она еще не существует:
+	#sudo groupadd docker
+	#Добавьте себя, или любого другого пользователя, который будет работать с Docker в эту группу:
+	#sudo gpasswd -a ${USER} docker
+	#Перезапустите Docker демона:
+	#sudo service docker restart
+	#Перезапустите систему
+
+	#И пользуйтесь
+
+	#docker-compose logs _name_
+end
+
+
+def runTestSymfony
+ #sudo docker exec -i 567e0d4cbc8d  php bin/phpunit 
+ #567e0d4cbc8d - container_id при том, что после выполнения 
+ #[sudo] docker run -it IMAGE_NAME bash попадаешь именно в тот каталог, в который прилинковано symfony
 end
