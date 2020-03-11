@@ -79,7 +79,9 @@ def mysqlConnect
 	#docker-compose logs _name_
 end
 
-
+# В принципе это за уши притянуто, это проект Symfony в котором каталог symfony (содержащий src) 
+# в контейнере имеет путь /var/www/html
+# Суть можно понять, после некотрого размышления 
 def runTestSymfony
  #sudo docker exec -i 567e0d4cbc8d  php bin/phpunit 
  #567e0d4cbc8d - container_id при том, что после выполнения 
