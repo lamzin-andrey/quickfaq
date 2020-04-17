@@ -346,6 +346,52 @@ module Log
 	end
 end
 
+module Mailer
+	def exampleConfig	
+		## Gmail SHOULD NOT be used on production, use it in development only.
+		#MAILER_DSN=gmail://username:password@default
+		##Если закомментировать предыдущую, и раскомментировать следующую - то да, тоже работает
+		##MAILER_DSN=smtp://username:password@smtp.gmail.com:587
+		# username тут надо писать без @gmail, - то есть если ваш email pupkin@gmail.com надо писать pupkin.
+	end
+	
+	def exampleCode
+		#use Symfony\Component\Mailer\MailerInterface;
+		#use Symfony\Component\Mime\Email;
+
+		#/**
+		 #* Отправить email об окончании регистрации
+		 #* @param string $sEmail
+		 #* @return
+		#*/
+		#private function _sendRegistrationEmail(string $sEmail, TranslatorInterface $t, Request $oRequest, MailerInterface $oMailer) : void
+		#{
+
+			#$email = (new Email())
+				#->from($this->getParameter('app.admin_email'))
+				#->to($sEmail)
+				#->priority(Email::PRIORITY_HIGH)
+				#->subject($t->trans('Thank for registration!'))
+				#->html($t->trans('Thank for registration on our project! <a href="{link}">Return to me</a>', ['{link}' => 'http://' . $oRequest->server->get('HTTP_HOST')]))
+			#;
+			#$oMailer->send($email);
+		#}
+	
+	end
+	
+	
+	def troubles
+		# Не забудь
+		
+		#composer require symfony/google-mailer
+		#composer require symfony/mime
+		
+		# И не забудь включить права отправки писем для приложений
+		# Если повезло, это всё ещё тут:
+		# https://myaccount.google.com/lesssecureapps?pli=1
+	end
+end
+
 module Migration
 	def addSql
 		#$this->addSql("NATIVE SQL QUERY");
@@ -370,6 +416,11 @@ module Migration
 	  #see Console.migration
 	  Console.migration
 	end
+end
+
+module Email
+	#see Mailer
+	Mailer
 end
 
 module Entity
