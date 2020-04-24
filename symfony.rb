@@ -268,7 +268,7 @@ module Controller
     
     def setCookie
 		#$oCookie = Cookie::create(name, value, time() + 3600);
-		#new Response()->setCookie($oCookie);
+		#new Response()->headers->setCookie($oCookie);
     end
   end
   
