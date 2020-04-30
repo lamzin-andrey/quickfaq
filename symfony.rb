@@ -1785,6 +1785,11 @@ module Security
         #		#see services.yaml
         #     success_handler: app.security.authentication_handler
         #     failure_handler: app.security.authentication_handler
+        #
+		#	  remember_me:
+		#		secret:   '%kernel.secret%'
+		#		path:     /
+		#		lifetime: 31449600 # 52 weeks in secondslifetime: 604800 # 1 week in seconds
         #    
         #    logout:
         #        target: /hello/anonymous
