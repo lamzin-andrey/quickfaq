@@ -1,7 +1,12 @@
-<?
+<?php
 function deadloc_info() {
 	//пользователем имеющим права (например root)
 	SHOW ENGINE INNODB STATUS
+
+	/**
+	 * Интересно и понятно про то, как читать этот вывод
+	 * https://www.delphiplus.org/mysql-optimizatsiya-proizvoditelnosti/sektsiya-latest-detected-deadlock.html
+	*/
 }
 function mysql_server_socket_recovery() {
 	"sudo /opt/lampp/bin/mysqld_safe --skip-grant-tables &";
@@ -235,3 +240,15 @@ function md5() {
 	"INSERT INTO `mdd` (hash, str) VALUES (UNHEX(md5('x')), md5('x'))"
 	//hash имеет тип данных binary(16)
 }
+
+function log_on() {
+	#log-bin=mysql-bin - это должно найтись
+
+
+	#это надо добавить
+
+	#general-log=1
+	#general-log-file = "/opt/lampp/var/mysql/all_queres.log"
+
+}
+

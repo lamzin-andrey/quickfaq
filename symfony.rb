@@ -284,6 +284,7 @@ module Test
     def run
 		# 3.4
 		$ php bin/phpunit tests/Controller
+		$ php bin/phpunit tests/Services/StsManagerTest.pgp
 		
 		# 2.6
       # run all tests in the Utility directory
