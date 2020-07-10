@@ -331,6 +331,21 @@ module Test
 		# 	test:
 		#		phone_number: '89008521212'
 	end
+	
+	def sendRequestToApi
+		$client->request(
+			'POST',
+			'/submit',
+			[],
+			[],
+			['CONTENT_TYPE' => 'application/json'],
+			'{"name":"Fabien"}'
+		);
+	end
+	
+	def createFtest
+	  # php bin/console make::functional-test
+	end
   end
 end
 

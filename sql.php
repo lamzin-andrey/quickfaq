@@ -223,6 +223,10 @@ function alter_table_change_column_type() {
 
 }
 
+function add_index() {
+	//ALTER TABLE `test`.`af_insurance_smart_policy_response` ADD INDEX `user_id` (`user_id`); 
+}
+
 function bigDumpRedo() {
 	/* если не хочет импортировать большие дампы, попробуй так
 	/opt/lampp/bin/mysql -uroot -p123456 -e"SET GLOBAL innodb_fast_shutdown = 0"
