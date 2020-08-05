@@ -193,4 +193,12 @@ module Xubuntu
 	    # $HOME/.phpstorm - было
 	    #
 	end
+	
+	class terminal
+		def out2to1
+			# вечно & вперед тащу, а зря
+			# 2>&1
+		end
+	end
+	
 end
