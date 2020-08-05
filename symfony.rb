@@ -66,7 +66,7 @@ module Console
     #php app/console cache:clear --env=prod --no-debug
     #php app/console cache:clear --env=dev --no-debug
   end
-  def migration
+  class migration
     #composer require doctrine/doctrine-migrations-bundle "^1.0"
     
     #add string in app/AppKernel.php
@@ -91,6 +91,19 @@ module Console
 		 #php app/console doctrine:migrations:status --show-versions
     #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
     
+    def status
+		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой 
+		#php app/console doctrine:migrations:status --show-versions
+    end
+    
+    def runall
+		## Выполнить все
+		# php bin/console doctrine:migrations:migrate
+    end
+        
+    def down
+		#php bin/console doctrine:migrations:execute 20200711070511 --down
+    end
     
   end
   
@@ -601,10 +614,10 @@ module Doctrine2
 	end
 	
 	def rawSql
-		$oEm = $this->getDoctrine()->getEntityManager();
-	    $sQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
+		$em = $this->getDoctrine()->getEntityManager();
+	    $sqlQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
 					GROUP BY (m.phone)';
-		$statement = $oEm->getConnection()->prepare($sQuery);
+		$statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();
 	end
 	
@@ -739,6 +752,15 @@ module Doctrine2
 	
 	def getCollectionOfEntities
 		$aPhones = $oRepository->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->orderBy('u.id', 'DESC')
+            ->getQuery()
+            ->execute();
+	end
+	
+	def getCollectionOfEntitiesIndexById
+		$aPhones = $oRepository->createQueryBuilder('u', 'u.id')
             ->andWhere('u.id = :id')
             ->setParameter('id', $nId)
             ->orderBy('u.id', 'DESC')
