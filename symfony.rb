@@ -768,6 +768,24 @@ module Doctrine2
             ->execute();
 	end
 	
+	def getConnection
+		 $conn = $this->container->get('doctrine')->getConnection('db_mysql_bigdata');
+		 
+		 #config/packages/doctrine.yaml
+		 
+		 # doctrine:  
+			# dbal:
+			# connections:
+
+					# db_mysql_new server:
+						# driver: pdo_mysql
+						# server_version: '5.7'
+						# charset: utf8mb4
+						# mapping_types:
+							# enum: string
+						# url: '%env(DB_MYSQL_SERVER_101_URL)%'
+	end
+	
 	def leftJoin
 		$aPhones = $oRepository->createQueryBuilder('u')
             ->andWhere('u.id = :id')

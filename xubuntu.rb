@@ -187,7 +187,7 @@ module Xubuntu
 	    # Консольный скрипт не юзаем
 	    # $HOME/.local/share/  тут что-то было
 	    # rm -rf $HOME/.local/share/JetBrains
-	    # $HOME/.config - всегда глядим
+	    # $HOME/.config - всегда глядим - и не зря, там теперь тоже есть
 	    # rm -rf $HOME/.PhpStorm2019.3.2
 	    ## rm -rf $HOME/.PhpStorm2019.4
 	    # $HOME/.phpstorm - было
