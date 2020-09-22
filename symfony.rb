@@ -619,6 +619,7 @@ module Doctrine2
 					GROUP BY (m.phone)';
 		$statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();
+        return $statement->fetchAll();
 	end
 	
 	
