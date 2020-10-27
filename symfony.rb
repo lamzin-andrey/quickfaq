@@ -1,3 +1,8 @@
+module 0Features
+	class createEntityFromTable
+		Console.createEntitiesFromDb
+	end
+end
 module Console
   class Command
 	def example
