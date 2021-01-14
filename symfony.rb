@@ -1160,7 +1160,8 @@ module FormType
 			
 		
 			#if ($oRequest->getMethod() == 'POST') {
-			#	$oForm->handleRequest($oRequest);
+			#	$oForm->handleRequest($oRequest); // но с этим часто сложности.
+			#   $form->submit($request->get('productForm')); // если RoolFormType::getName() == 'app.productForm' это работает
 			#	if ($oForm->isValid()) {
 			#		//TODO save data
 			#   	Например понадобилась дополнительная валидация, добавляем ошибку полю ввода	

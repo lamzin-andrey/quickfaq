@@ -194,6 +194,12 @@ module Xubuntu
 	    #
 	end
 	
+	class PhpStormDiskreload
+		# Settings/Preferences | Appearance & Behavior | System Settings
+		# Отменить Synchronize files on frame activation
+		# Я ненавижу тех, кто установил эту опцию по дефолту
+	end
+	
 	class terminal
 		def out2to1
 			# вечно & вперед тащу, а зря

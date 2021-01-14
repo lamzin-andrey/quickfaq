@@ -26,3 +26,15 @@ class ConfigApp
 	end
 	
 end
+
+
+module Errors
+	class Chokodair
+	 #echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+	end
+	
+	class ENOSPC
+		#@see
+		Chockodair
+	end
+end
