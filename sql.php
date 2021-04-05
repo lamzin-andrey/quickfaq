@@ -252,7 +252,7 @@ function log_on() {
 	#это надо добавить
 
 	#general-log=1
-	#general-log-file = "/opt/lampp/var/mysql/all_queres.log"
+	#general-log-file = "/opt/lampp/var/mysql/all_queries.log"
 
 }
 

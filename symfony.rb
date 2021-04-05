@@ -2,6 +2,9 @@ module 0Features
 	class createEntityFromTable
 		Console.createEntitiesFromDb
 	end
+	class generateMigration
+	  # php bin/console doctrine:migrations:generate
+	end
 end
 module Console
   class Command
@@ -72,6 +75,8 @@ module Console
     #php app/console cache:clear --env=dev --no-debug
   end
   class migration
+	#php bin/console doctrine:migrations:generate
+  
     #composer require doctrine/doctrine-migrations-bundle "^1.0"
     
     #add string in app/AppKernel.php
