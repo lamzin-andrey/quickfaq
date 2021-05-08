@@ -187,10 +187,24 @@ module Xubuntu
 	    # Консольный скрипт не юзаем
 	    # $HOME/.local/share/  тут что-то было
 	    # rm -rf $HOME/.local/share/JetBrains
-	    # $HOME/.config - всегда глядим
+	    # $HOME/.config - всегда глядим - и не зря, там теперь тоже есть
 	    # rm -rf $HOME/.PhpStorm2019.3.2
 	    ## rm -rf $HOME/.PhpStorm2019.4
 	    # $HOME/.phpstorm - было
 	    #
 	end
+	
+	class PhpStormDiskreload
+		# Settings/Preferences | Appearance & Behavior | System Settings
+		# Отменить Synchronize files on frame activation
+		# Я ненавижу тех, кто установил эту опцию по дефолту
+	end
+	
+	class terminal
+		def out2to1
+			# вечно & вперед тащу, а зря
+			# 2>&1
+		end
+	end
+	
 end

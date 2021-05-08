@@ -1,3 +1,11 @@
+module 0Features
+	class createEntityFromTable
+		Console.createEntitiesFromDb
+	end
+	class generateMigration
+	  # php bin/console doctrine:migrations:generate
+	end
+end
 module Console
   class Command
 	def example
@@ -66,7 +74,9 @@ module Console
     #php app/console cache:clear --env=prod --no-debug
     #php app/console cache:clear --env=dev --no-debug
   end
-  def migration
+  class migration
+	#php bin/console doctrine:migrations:generate
+  
     #composer require doctrine/doctrine-migrations-bundle "^1.0"
     
     #add string in app/AppKernel.php
@@ -91,6 +101,19 @@ module Console
 		 #php app/console doctrine:migrations:status --show-versions
     #php app/console doctrine:migrations:migrate ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР
     
+    def status
+		## Это выполнит файл миграции, ПОСЛЕДНИЙ_НЕВЫПОЛНЕННЫЙ_НОМЕР получите командой 
+		#php app/console doctrine:migrations:status --show-versions
+    end
+    
+    def runall
+		## Выполнить все
+		# php bin/console doctrine:migrations:migrate
+    end
+        
+    def down
+		#php bin/console doctrine:migrations:execute 20200711070511 --down
+    end
     
   end
   
@@ -601,11 +624,12 @@ module Doctrine2
 	end
 	
 	def rawSql
-		$oEm = $this->getDoctrine()->getEntityManager();
-	    $sQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
+		$em = $this->getDoctrine()->getEntityManager();
+	    $sqlQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
 					GROUP BY (m.phone)';
-		$statement = $oEm->getConnection()->prepare($sQuery);
+		$statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();
+        return $statement->fetchAll();
 	end
 	
 	
@@ -744,6 +768,33 @@ module Doctrine2
             ->orderBy('u.id', 'DESC')
             ->getQuery()
             ->execute();
+	end
+	
+	def getCollectionOfEntitiesIndexById
+		$aPhones = $oRepository->createQueryBuilder('u', 'u.id')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $nId)
+            ->orderBy('u.id', 'DESC')
+            ->getQuery()
+            ->execute();
+	end
+	
+	def getConnection
+		 $conn = $this->container->get('doctrine')->getConnection('db_mysql_bigdata');
+		 
+		 #config/packages/doctrine.yaml
+		 
+		 # doctrine:  
+			# dbal:
+			# connections:
+
+					# db_mysql_new server:
+						# driver: pdo_mysql
+						# server_version: '5.7'
+						# charset: utf8mb4
+						# mapping_types:
+							# enum: string
+						# url: '%env(DB_MYSQL_SERVER_101_URL)%'
 	end
 	
 	def leftJoin
@@ -1114,7 +1165,8 @@ module FormType
 			
 		
 			#if ($oRequest->getMethod() == 'POST') {
-			#	$oForm->handleRequest($oRequest);
+			#	$oForm->handleRequest($oRequest); // но с этим часто сложности.
+			#   $form->submit($request->get('productForm')); // если RoolFormType::getName() == 'app.productForm' это работает
 			#	if ($oForm->isValid()) {
 			#		//TODO save data
 			#   	Например понадобилась дополнительная валидация, добавляем ошибку полю ввода	

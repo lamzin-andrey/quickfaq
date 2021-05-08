@@ -6,3 +6,9 @@ module Date
         end
     end
 end
+
+module File
+	def pathinfo
+		['extension' => 'png', 'basename' => '0.png', 'filename' => '0', 'dirname' => '/home/user']
+	end
+end
