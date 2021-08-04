@@ -207,4 +207,10 @@ module Xubuntu
 		end
 	end
 	
+	class git
+		def changeAuthor
+			# git config --global --edit
+			# git commit --amend --reset-author
+		end
+	end
 end

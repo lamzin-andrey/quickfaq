@@ -624,12 +624,19 @@ module Doctrine2
 	end
 	
 	def rawSql
+		#in controller
 		$em = $this->getDoctrine()->getEntityManager();
 	    $sqlQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
 					GROUP BY (m.phone)';
 		$statement = $em->getConnection()->prepare($sqlQuery);
         $statement->execute();
         return $statement->fetchAll();
+        
+        #in repository
+        $em = $this->getEntityManager();
+        $sql = 'UPDATE af_osago_offer_task SET status = ' . OsagoOfferTask::STATUS_NO_ACTUAL . ' WHERE id IN(' . implode(',', $idList) . ')';
+        $statement = $em->getConnection()->prepare($sql);
+        $statement->execute();
 	end
 	
 	
