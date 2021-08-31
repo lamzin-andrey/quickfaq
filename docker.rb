@@ -37,6 +37,7 @@ end
 
 def stop
 	# sudo docker-compose down
+	# sudo docker stop container_id
 end
 
 def whereIs
