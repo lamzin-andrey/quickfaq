@@ -260,6 +260,14 @@ function get_all_foreign_keys() {
 	"SELECT   TABLE_NAME,   COLUMN_NAME,   CONSTRAINT_NAME,
 	      REFERENCED_TABLE_NAME,   REFERENCED_COLUMN_NAME 
 	      FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE   
-	      REFERENCED_TABLE_NAME = 'table_name';"
+	      REFERENCED_TABLE_NAME = 'af_policies';"
+}
+
+function dropKascheyFK() {
+	'MariaDB [via_mobi]> SET FOREIGN_KEY_CHECKS = 0;
+Query OK, 0 rows affected (0.00 sec)
+MariaDB [via_mobi]> ALTER TABLE af_car_policies  DROP  FOREIGN KEY IF EXISTS _FK_629BF7922D29E3C6;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0'ж
 }
 

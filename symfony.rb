@@ -483,6 +483,20 @@ module Entity
 		end
 	end
 	
+	def Indexes
+      #@ORM\Table(
+       #name="table",
+       #uniqueConstraints={
+          #@ORM\UniqueConstraint(name="const_name", columns={"field_name"})
+       #},
+       #indexes={
+          #@ORM\Index(name="user_id", columns={"user_id"}),
+          #@ORM\Index(name="field_two", columns={"field_name"}),
+          #@ORM\Index(name="field_three", columns={"field_name_one, field_name_two"})
+       #}
+      #)
+	end
+	
 	class Datetime
 		def created_at
 			#Для работы с датой и временем сущности в Doctrine используй поля created_at
