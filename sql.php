@@ -268,6 +268,9 @@ function dropKascheyFK() {
 Query OK, 0 rows affected (0.00 sec)
 MariaDB [via_mobi]> ALTER TABLE af_car_policies  DROP  FOREIGN KEY IF EXISTS _FK_629BF7922D29E3C6;
 Query OK, 0 rows affected (0.01 sec)
-Records: 0  Duplicates: 0  Warnings: 0'ж
+Records: 0  Duplicates: 0  Warnings: 0';
 }
 
+function updateDatetime() {
+	'UPDATE table SET date = DATE_ADD(date, INTERVAL 1 YEAR)';
+}

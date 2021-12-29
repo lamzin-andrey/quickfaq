@@ -2349,3 +2349,11 @@ module Cookies
 	Controller.Request.Cookie
 	Controller.Response.setCookie
 end
+
+module Service
+	def request
+		# $this->oContainer->get('request_stack')->getCurrentRequest()
+	end
+	
+	$container->get('request_stack')->getCurrentRequest()
+end
