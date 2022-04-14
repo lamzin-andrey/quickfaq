@@ -1,9 +1,21 @@
 def firstProject
 	# Установка https://docs.docker.com/install/linux/docker-ce/ubuntu/
+	# В ней же смотрим как ставить docker-compose, через синоптик может прийти треш
 	#статья https://verstaem.com/devops/docker-php-development/?unapproved=1972&moderation-hash=8d5b070ff555fcfeccaa00887fd417ca#comment-1972
 
-    #После создания папок и конфигов, то ли нужно, то ли не нужно было 
-    #usermod -aG docker ${USER}
+    
+    # In ~/.bashrc
+    #export XUSER=andrey
+	#export XHOME=/home/${XUSER}
+	export uid=$(id -u) 
+	export gid=$(id -g)
+	
+	# In console 
+	sudo su
+	su andrey
+    usermod -aG docker andrey
+    sudo docker-compose up -d --build
+    
     
     #При сборке пришлось выпилить xdebug из apache/Dockerfile, т к pecl Требовал php 7
     

@@ -462,6 +462,23 @@ module Email
 	Mailer
 end
 
+module Messengers
+	class RabbitMq
+		def  xMaxPriority
+		    #transports:
+			  #name_for_routimg_section:
+			    #dsn: '%env(YOUR_MESSENGER_TRANSPORT_DSN)%/%rabbit_path%/rabbitmq_queue_name'
+			    #options:
+			      #queues:
+				    #rabbitmq_queue_name:
+				      #arguments:
+					    #x-max-priority: 3
+			#routing:
+			  #'App\Message\YourModule\NamedMessage': name_for_routing_section
+		end
+	end
+end
+
 module Entity
 	class Validator
 		def Password
@@ -484,17 +501,17 @@ module Entity
 	end
 	
 	def Indexes
-      #@ORM\Table(
-       #name="table",
-       #uniqueConstraints={
-          #@ORM\UniqueConstraint(name="const_name", columns={"field_name"})
-       #},
-       #indexes={
-          #@ORM\Index(name="user_id", columns={"user_id"}),
-          #@ORM\Index(name="field_two", columns={"field_name"}),
-          #@ORM\Index(name="field_three", columns={"field_name_one, field_name_two"})
-       #}
-      #)
+      #~ @ORM\Table(
+       #~ name="table",
+       #~ uniqueConstraints={
+          #~ @ORM\UniqueConstraint(name="const_name", columns={"field_name"})
+       #~ },
+       #~ indexes={
+          #~ @ORM\Index(name="user_id", columns={"user_id"}),
+          #~ @ORM\Index(name="field_two", columns={"field_name"}),
+          #~ @ORM\Index(name="field_three", columns={"field_name_one, field_name_two"})
+       #~ }
+      #~ )
 	end
 	
 	class Datetime
