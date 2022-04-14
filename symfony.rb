@@ -466,7 +466,7 @@ module Messengers
 	class RabbitMq
 		def  xMaxPriority
 		    #transports:
-			  #name_for_routimg_section:
+			  #name_for_routing_section:
 			    #dsn: '%env(YOUR_MESSENGER_TRANSPORT_DSN)%/%rabbit_path%/rabbitmq_queue_name'
 			    #options:
 			      #queues:
