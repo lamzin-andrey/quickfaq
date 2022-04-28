@@ -663,6 +663,16 @@ module Doctrine2
         $statement->execute();
         return $statement->fetchAll();
         
+        $idList = array_column($rows, 'id');
+		$sql = 'UPDATE `af_insurance_sravni_ru_offer_task_extend_data`
+					SET is_target_company = 1
+				WHERE   id IN (:ids);';
+
+		$this->getDoctrine()->getManager()->executeUpdate($sql, [
+			'ids' => $idList,
+		], ['ids' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
+        
+        
         #in repository
         $em = $this->getEntityManager();
         $sql = 'UPDATE af_osago_offer_task SET status = ' . OsagoOfferTask::STATUS_NO_ACTUAL . ' WHERE id IN(' . implode(',', $idList) . ')';
