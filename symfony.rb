@@ -139,6 +139,22 @@ module Configuration
 	# MAILER_URL=gmail://username_without!_@gmail.com:password@localhost
 	# smtp://smtp.gmail.com:587?encryption=tls&auth_mode=login&username=username_without!_@gmail.com&password=password
   end
+  
+  class CustomController
+	# На практике не проверенно, но очень интересно
+	def routes_yaml
+		#modulename:
+		  #type: rest
+		  #prefix: /{version}/api/Modulename/v2
+		  #resource: ../src/Modulename/Controller/
+	end
+	
+	def services_yaml
+		#App\Modulename\Controller\:
+			#resource: '../src/Modulename/Controller'
+			#tags: [ 'controller.service_arguments' ]
+	end
+  end
 end
 
 module Controller
@@ -671,6 +687,17 @@ module Doctrine2
 		$this->getDoctrine()->getManager()->getConnection()->executeUpdate($sql, [
 			'ids' => $idList,
 		], ['ids' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
+		
+		/*
+			[
+
+                'userId' => ParameterType::INTEGER,
+                'text' => ParameterType::STRING,
+                'type' => ParameterType::STRING,
+                'status' => ParameterType::STRING,
+
+            ]
+		*/
         
         
         #in repository

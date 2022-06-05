@@ -31,3 +31,59 @@ module Curl
     #~ }
 	end
 end
+
+module AMQP
+namespace App\Insurance\Library;
+
+class RabbitQueueInfoProvider
+{
+
+    def getQuantityMessagesInQueue(
+
+        string $queueName,
+
+        string $envVariableName = 'MESSENGER_TRANSPORT_DSN',
+
+        ?int $priority = null
+
+    ) : int {
+
+        $dsn = parse_url(getenv($envVariableName));
+
+        $amqpConnection = new \AMQPConnection([
+
+            'host' => ($dsn['host'] ?? 'localhost'),
+
+            'port' => ($dsn['port'] ?? 5672),
+
+            'vhost' => '/',
+
+            'login' => ($dsn['user'] ?? 'guest'),
+
+            'password' => ($dsn['pass'] ?? 'guest'),
+
+        ]);
+
+        $amqpConnection->connect();
+
+        $channel = new \AMQPChannel($amqpConnection);
+
+        $amqpQueue = new \AMQPQueue($channel);
+
+        $amqpQueue->setFlags(AMQP_DURABLE);
+
+        if (null !== $priority) {
+
+            $amqpQueue->setArgument('x-max-priority', $priority);
+
+        }
+
+        $amqpQueue->setName($queueName);
+
+        return  intval($amqpQueue->declareQueue());
+
+	$}
+    end
+
+}
+end

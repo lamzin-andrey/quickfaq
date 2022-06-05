@@ -274,3 +274,27 @@ Records: 0  Duplicates: 0  Warnings: 0';
 function updateDatetime() {
 	'UPDATE table SET date = DATE_ADD(date, INTERVAL 1 YEAR)';
 }
+
+
+function partition_table() {
+	$createByYears = 'CREATE TABLE orders_range (
+		customer_surname VARCHAR(30),
+		store_id INT,
+		salesperson_id INT,
+		order_date DATE,
+		note VARCHAR(500)
+		) ENGINE = MYISAM
+		PARTITION BY RANGE( YEAR(order_date) ) (
+		PARTITION p_old VALUES LESS THAN(2008),
+		PARTITION p_2008 VALUES LESS THAN(2009),
+		PARTITION p_2009 VALUES LESS THAN(MAXVALUE)
+		);';
+	
+	$createMonthly = "PARTITION BY RANGE( TO_DAYS(order_date) ) (
+		PARTITION y2009m1 VALUES LESS THAN( TO_DAYS('2009-02-01') ),
+		PARTITION y2009m2 VALUES LESS THAN( TO_DAYS('2009-03-01') ),
+		PARTITION y2009m3 VALUES LESS THAN( TO_DAYS('2009-04-01') )
+		);";
+		
+	$removePart = 'ALTER TABLE table_name TRUNCATE PARTITION partition_name;';
+}
