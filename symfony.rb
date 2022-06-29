@@ -1592,6 +1592,157 @@ end
 # Sym 3.4
 
 module Bundles
+	# Sym 4.3.11
+	class SensioParamConverter
+		# Здесь всё больше на предположениях
+		def realName
+			'use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;'
+		end
+		def example
+			# /*
+			# @ParamConverter(
+			 # *     "requestDto", // переменная из аргументов методов. Типа Update[ENTITY_NAME]Dto
+			 # *     converter="form_data_converter", // видимо, где-то сервис
+			 # *     class=Update[ENTITY_NAME]Dto::class,// тут возможно не всё так просто, но так тоже должно работать.
+			 # *     options={"type": FormType::class, "force_submit_array": true}FormType - это просто тип формы.
+			 # * )
+			# */
+		end
+		
+		def service_yaml
+			#~ App\Form\ParamConverter\FormDataConverter:
+				#~ autowire: true
+				#~ tags:
+					#~ - { name: request.param_converter, priority: 10000, converter: form_data_converter }
+		end
+		
+		def FormDataConverter
+			
+			#~ class FormDataConverter implements ParamConverterInterface
+			#~ {
+				#~ public const SOURCE_QUERY = 'query';
+				#~ public const SOURCE_HEADERS = 'headers';
+
+				#~ private FormFactory $factory;
+
+				#~ public function __construct(FormFactory $factory)
+				#~ {
+					#~ $this->factory = $factory;
+				#~ }
+
+				#~ /**
+				 #~ * @throws FormValidationException
+				 #~ * @throws RuntimeException
+				 #~ * @throws InvalidOptionsException
+				 #~ * @throws LogicException
+				 #~ */
+				#~ public function apply(Request $request, ParamConverter $configuration) : bool
+				#~ {
+					#~ $options = $configuration->getOptions();
+
+					#~ if (!array_key_exists('type', $options)) {
+						#~ $message = sprintf('Undefined Type. Try "@ParamConverter("%s", options={"type": "%s"})"', $configuration->getName(), 'SymfonyTypeClass');
+
+						#~ throw new RuntimeException($message);
+					#~ }
+
+					#~ $form = $this->factory->create($options['type'], null, [
+						#~ 'method' => $request->getMethod(),
+					#~ ]);
+
+					#~ $this->submitForm($request, $form, $options);
+
+					#~ $entity = $form->validate()
+						#~ ->getData()
+					#~ ;
+
+					#~ $request->attributes->set($configuration->getName(), $entity);
+
+					#~ return true;
+				#~ }
+
+				#~ public function supports(ParamConverter $configuration) : bool
+				#~ {
+					#~ return is_a($configuration->getClass(), ParamConverterEntityInterface::class, true);
+				#~ }
+
+				#~ /**
+				 #~ * @param array<mixed> $options
+				 #~ *
+				 #~ * @throws LogicException
+				 #~ */
+				#~ private function submitForm(Request $request, AppForm $form, array $options) : void
+				#~ {
+					#~ $clearMissing = $options['clearMissing'] ?? false;
+
+					#~ if (array_key_exists('source', $options)) {
+						#~ if (self::SOURCE_QUERY === $options['source']) {
+							#~ $form->submitArray($request->query->all(), $clearMissing);
+
+							#~ return;
+						#~ }
+
+						#~ if (self::SOURCE_HEADERS === $options['source']) {
+							#~ $values = $this->headersToArray($request->headers->all());
+							#~ $form->submitArray($values, $clearMissing);
+
+							#~ return;
+						#~ }
+					#~ }
+
+					#~ if (array_key_exists('force_submit_array', $options) && true === $options['force_submit_array']) {
+						#~ $form->submitArray($request->request->all(), $clearMissing);
+
+						#~ return;
+					#~ }
+
+					#~ $form->submitRequest($request);
+				#~ }
+
+				#~ /**
+				 #~ * @param array<string, array<int, mixed>> $headers
+				 #~ *
+				 #~ * @return array<string, mixed>
+				 #~ */
+				#~ private function headersToArray(array $headers) : array
+				#~ {
+					#~ $result = [];
+
+					#~ foreach ($headers as $key => $values) {
+						#~ $result[$key] = $values[0];
+					#~ }
+
+					#~ return $result;
+				#~ }
+			#~ }
+			
+			def FormFactory
+				#~ use Symfony\Component\Form\FormFactoryInterface;
+				#~ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+
+				#~ class FormFactory
+				#~ {
+					#~ private FormFactoryInterface $formFactory;
+
+					#~ public function __construct(FormFactoryInterface $formFactory)
+					#~ {
+						#~ $this->formFactory = $formFactory;
+					#~ }
+
+					#~ /**
+					 #~ * @param mixed $data
+					 #~ * @param array<string, mixed> $options
+					 #~ *
+					 #~ * @throws InvalidOptionsException
+					 #~ */
+					#~ public function create(string $formType, $data = null, array $options = []) : AppForm
+					#~ {
+						#~ return new AppForm($this->formFactory->create($formType, $data, $options));
+					#~ }
+				#~ }
+			end
+		end
+	end
 	# Sym 3.4
 	class HWIOAuthBundle
 		# Сначала надо установить FOSUserBundle
