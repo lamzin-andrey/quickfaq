@@ -298,3 +298,12 @@ function partition_table() {
 		
 	$removePart = 'ALTER TABLE table_name TRUNCATE PARTITION partition_name;';
 }
+
+
+function json_field() {
+	$s = 'AND JSON_EXTRACT(`value`, "$.value") IS TRUE';
+	$s = 'select id, name, user_id  from ins_settings_user
+			where id in (60, 61)
+			AND JSON_EXTRACT(`value`, "$.value") IS TRUE
+			;';
+}
