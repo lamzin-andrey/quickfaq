@@ -302,7 +302,7 @@ function partition_table() {
 
 function json_field() {
 	$s = 'AND JSON_EXTRACT(`value`, "$.value") IS TRUE';
-	$s = 'select id, name, user_id  from ins_settings_user
+	$s = 'select id, name, user_id  from table_name
 			where id in (60, 61)
 			AND JSON_EXTRACT(`value`, "$.value") IS TRUE
 			;';
