@@ -1715,33 +1715,34 @@ module Bundles
 					#~ return $result;
 				#~ }
 			#~ }
-			
-			def FormFactory
-				#~ use Symfony\Component\Form\FormFactoryInterface;
-				#~ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-
-				#~ class FormFactory
-				#~ {
-					#~ private FormFactoryInterface $formFactory;
-
-					#~ public function __construct(FormFactoryInterface $formFactory)
-					#~ {
-						#~ $this->formFactory = $formFactory;
-					#~ }
-
-					#~ /**
-					 #~ * @param mixed $data
-					 #~ * @param array<string, mixed> $options
-					 #~ *
-					 #~ * @throws InvalidOptionsException
-					 #~ */
-					#~ public function create(string $formType, $data = null, array $options = []) : AppForm
-					#~ {
-						#~ return new AppForm($this->formFactory->create($formType, $data, $options));
-					#~ }
-				#~ }
-			end
 		end
+		
+		def FormFactory
+			#~ use Symfony\Component\Form\FormFactoryInterface;
+			#~ use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+
+			#~ class FormFactory
+			#~ {
+				#~ private FormFactoryInterface $formFactory;
+
+				#~ public function __construct(FormFactoryInterface $formFactory)
+				#~ {
+					#~ $this->formFactory = $formFactory;
+				#~ }
+
+				#~ /**
+				 #~ * @param mixed $data
+				 #~ * @param array<string, mixed> $options
+				 #~ *
+				 #~ * @throws InvalidOptionsException
+				 #~ */
+				#~ public function create(string $formType, $data = null, array $options = []) : AppForm
+				#~ {
+					#~ return new AppForm($this->formFactory->create($formType, $data, $options));
+				#~ }
+			#~ }
+		end
+		
 	end
 	# Sym 3.4
 	class HWIOAuthBundle
