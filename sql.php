@@ -220,7 +220,9 @@ function alter_table_change_primary_key() {
 
 function alter_table_change_column_type() {
     //ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
-
+	// mysql / maria
+	// ALTER TABLE `ins_rsa_policy`  CHANGE COLUMN `data_source` `data_source` enum('osago_parser', 'smart_policy', 'user_add_manual');
+	// ALTER TABLE `f` DROP INDEX i;
 }
 
 function add_index() {
