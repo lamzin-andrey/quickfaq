@@ -10,6 +10,9 @@ def firstProject
 	export uid=$(id -u) 
 	export gid=$(id -g)
 	
+	sudo groupadd docker
+	sudo gpasswd -a $USER docker 
+	
 	# In console 
 	sudo su
 	su andrey
