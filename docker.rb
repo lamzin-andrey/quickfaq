@@ -47,6 +47,13 @@ def rebuild
    #  docker-compose up -d --force-recreate --build
 end
 
+def runCommand
+	 # -- как выполнить команду в один клик или хотя бы через alias migrund?
+	 #   - Элементарно.
+	 #docker exec -it  rosfines-dev_backend4_105_1 php bin/console doctrine:migration:migrate
+	 #Уже в migrund.sh
+end
+
 def stop
 	# sudo docker-compose down
 	# sudo docker stop container_id
