@@ -471,6 +471,10 @@ module Migration
 	  #see Console.migration
 	  Console.migration
 	end
+	
+	def otherEntityManager
+		# php bin/console doctrine:migration:migrate -em database_2_em
+	end
 end
 
 module Email

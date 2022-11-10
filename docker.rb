@@ -60,6 +60,7 @@ end
 def stop
 	# sudo docker-compose down
 	# sudo docker stop container_id
+	# docker kill $(docker ps -q) # stop all
 end
 
 def whereIs
