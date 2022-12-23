@@ -52,7 +52,7 @@ module Console
 	#
 	# DATABASE_URL=mysql://andrey:123456@127.0.0.1:3306/databasename
 	#
-	# php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Entity
+	# php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Insurance/Admin/Entity
 	# php bin/console make:entity --regenerate App
 	#
   end
@@ -683,6 +683,42 @@ module Doctrine2
         $statement->execute();
         return $statement->fetchAll();
         
+/*  
+
+     * @return array<int,array<string,mixed>>
+     *
+     * @throws Exception
+     * @throws DBALException
+     *
+    private function select(string $sql, array $params, array $types = [], string $connectionName = 'default') : array
+    {
+        if (!$types) {
+            $data = $this->getDbConnection($connectionName)->executeQuery($sql, $params)->fetchAllAssociative();
+        } else {
+            $data = $this->getDbConnection($connectionName)->executeQuery($sql, $params, $types)->fetchAllAssociative();
+        }
+
+        return $data;
+    }
+
+    private function getDbConnection(string $name) : Connection
+    {
+        $connection = $this->container->get('doctrine')->getConnection($name);
+
+        if (!$connection instanceof Connection) {
+            throw new RuntimeException();
+        }
+
+        if (!$connection->ping()) {
+            $connection->close();
+            $connection->connect();
+        }
+
+        return $connection;
+    }
+      'offset' => Doctrine\DBAL\ParameterType::INTEGER,
+            'limit' => ParameterType::INTEGER,
+  */      
         $idList = array_column($rows, 'id');
 		$sql = 'UPDATE `af_insurance_sravni_ru_offer_task_extend_data`
 					SET is_target_company = 1

@@ -34,5 +34,25 @@ module Index
 #~ Однако в этом случае, в выборке могут использоваться колонки слева-направо
  #~ (фильтр по одной только колонке url не использует индекс).
  #~ Как и в других базах данных индекс будет использован в случае не только равенства, а и неравенства и операции IN. 
+
+
+#~ CREATE TABLE IF NOT EXISTS `mytable` (
+            #~ `date` Date,
+            #~ `_timestamp` INTEGER DEFAULT 0,
+            #~ `is_banned` INTEGER DEFAULT 0,
+            #~ `is_success` INTEGER DEFAULT 0,
+            #~ fee_amount DECIMAL(10,2)
+            #~ `proxy_name` String,
+            #~ `error_code` String,
+            #~ `created_time` DateTime(\'Europe/Moscow\')
+#~ )ENGINE=MergeTree(date, (`_timestamp`, `proxy_name`), 8192);
  
+end
+
+def drop
+  # DROP TABLE foo
+end
+
+def delete
+  # ALTER TABLE `foo` DELETE WHERE vehicle_plate IN (:plates)
 end

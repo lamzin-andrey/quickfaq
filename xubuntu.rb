@@ -205,6 +205,83 @@ module Xubuntu
 			# вечно & вперед тащу, а зря
 			# 2>&1
 		end
+		def windows_is_hibernated
+			# sudo mount -t ntfs-3g -o remove_hiberfile /dev/sda3 /media/windows
+			# [sudo] пароль для andrey: 
+			# Mount is denied because the NTFS volume is already exclusively opened.
+			# The volume may be already mounted, or another software may use it which
+			# could be identified for example by the help of the 'fuser' command.
+			
+			#^ Unmount from thunar
+			
+			# sudo mount -t ntfs-3g -o remove_hiberfile /dev/sda3 /media/windows
+			#The disk contains an unclean file system (0, 0).
+			#Metadata kept in Windows cache, refused to mount.
+			#Failed to mount '/dev/sda3': Операция не позволена
+			#The NTFS partition is in an unsafe state. Please resume and shutdown
+			#Windows fully (no hibernation or fast restarting), or mount the volume
+			#read-only with the 'ro' mount option.
+			
+			#^ It ok, dont worry be happy
+			
+			# sudo ntfsfix /dev/sda3
+			#Mounting volume... Windows is hibernated, refused to mount.
+			#FAILED
+			#Attempting to correct errors... 
+			#Processing $MFT and $MFTMirr...
+			#Reading $MFT... OK
+			#Reading $MFTMirr... OK
+			#Comparing $MFTMirr to $MFT... OK
+			#Processing of $MFT and $MFTMirr completed successfully.
+			#Setting required flags on partition... OK
+			#Going to empty the journal ($LogFile)... OK
+			#Windows is hibernated, refused to mount.
+			#Remount failed: Operation not permitted
+			
+			#^ It ok, dont worry be happy
+			
+			# sudo ntfsfix /dev/sda3
+			#Mounting volume... Windows is hibernated, refused to mount.
+			#FAILED
+			#Attempting to correct errors... 
+			#Processing $MFT and $MFTMirr...
+			#Reading $MFT... OK
+			#Reading $MFTMirr... OK
+			#Comparing $MFTMirr to $MFT... OK
+			#Processing of $MFT and $MFTMirr completed successfully.
+			#Setting required flags on partition... OK
+			#Going to empty the journal ($LogFile)... OK
+			#Windows is hibernated, refused to mount.
+			#Remount failed: Operation not permitted
+			
+			#^ It ok, dont worry be happy
+			
+			# sudo mount -t ntfs-3g -o remove_hiberfile /dev/sda3 /media/windows
+			
+			#^ Happy!
+			
+			# sudo ntfsfix /dev/sda4
+			# Mounting volume... The disk contains an unclean file system (0, 0).
+			# Metadata kept in Windows cache, refused to mount.
+			# FAILED
+			# Attempting to correct errors... 
+			# Processing $MFT and $MFTMirr...
+			# Reading $MFT... OK
+			# Reading $MFTMirr... OK
+			# Comparing $MFTMirr to $MFT... OK
+			# Processing of $MFT and $MFTMirr completed successfully.
+			# Setting required flags on partition... OK
+			# Going to empty the journal ($LogFile)... OK
+			# Checking the alternate boot sector... OK
+			# NTFS volume version is 3.1.
+			# NTFS partition /dev/sda4 was processed successfully.
+			# andrey@andrey-ssd:~$ sudo ntfsfix /dev/sda4
+			# Mounting volume... OK
+			# Processing of $MFT and $MFTMirr completed successfully.
+			
+			#^ Happy!
+
+		end
 	end
 	
 	class git

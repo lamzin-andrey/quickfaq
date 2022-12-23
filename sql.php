@@ -309,3 +309,7 @@ function json_field() {
 			AND JSON_EXTRACT(`value`, "$.value") IS TRUE
 			;';
 }
+
+function different_encoding_join() {
+	// ON CONVERT(ic.name USING utf8) = t.name
+}
