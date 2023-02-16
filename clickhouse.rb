@@ -56,3 +56,13 @@ end
 def delete
   # ALTER TABLE `foo` DELETE WHERE vehicle_plate IN (:plates)
 end
+
+def config
+	clickhouse:
+		driver_class: FOD\DBALClickHouse\Driver
+		wrapper_class: FOD\DBALClickHouse\Connection
+		options:
+			enable_http_compression: 1
+			max_execution_time: 60
+		url: '%env(DB_CLICKHOUSE_URL)%' # .env: DB_CLICKHOUSE_URL=//default:798420Wd@host.ru:8123/default
+end

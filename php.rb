@@ -4,6 +4,10 @@ module Date
             date('N'); #1 - Monday, 7 - Sunday
             date('w'); #0 - Sunday, 6 - Saturday
         end
+        def pregMatchDate
+			#^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$#
+			#^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$#
+        end
     end
 end
 

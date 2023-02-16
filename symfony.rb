@@ -724,7 +724,7 @@ module Doctrine2
 					SET is_target_company = 1
 				WHERE   id IN (:ids);';
 
-		$this->getDoctrine()->getManager()->getConnection()->executeUpdate($sql, [
+		$this->getDoctrine()->getManager()->getConnection()->executeStatement($sql, [
 			'ids' => $idList,
 		], ['ids' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
 		
