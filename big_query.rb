@@ -1,19 +1,19 @@
 def select_offset
-	# SELECT *  FROM `analytics-376010.test_dataset.payments` 
-	# WHERE payment_type = 'fine'
-	# ORDER BY `payment_time` ASC 
+	# SELECT *  FROM `analytics-ХХХХХХ.test_dataset.payments` 
+	# WHERE payment_type = 'bonus'
+	# ORDER BY `malus` ASC 
 	# LIMIT 10 OFFSET 10
 end
 
 def alter
 /*
-ALTER TABLE analytics-376010.test_dataset.user_channels
+ALTER TABLE analytics-ХХХХХХ.test_dataset.user_channels
 ADD COLUMN company_id STRING;
 
-ALTER TABLE analytics-376010.test_dataset.user_channels
+ALTER TABLE analytics-ХХХХХХ.test_dataset.user_channels
 DROP COLUMN chanel;
 
-	ALTER TABLE analytics-376010.test_dataset.user_channels
+	ALTER TABLE analytics-ХХХХХХ.test_dataset.user_channels
 	RENAME COLUMN old_name TO new_name;
 
 ALTER TABLE mydataset.mytable
@@ -23,10 +23,10 @@ ALTER TABLE mydataset.mytable
 ALTER COLUMN mycolumn
 DROP NOT NULL;
 
-ALTER TABLE analytics-376010.test_dataset.osago_event_extend_data
+ALTER TABLE analytics-ХХХХХХ.test_dataset.mutabor
 ALTER COLUMN event_communication_type
 SET DEFAULT NULL;
 
-DELETE FROM test_dataset.osago_event_extend_data WHERE true;
+DELETE FROM test_dataset.mutabor WHERE true;
 */
 end
