@@ -1,4 +1,7 @@
 module 0Features
+	class rawSql
+		Doctrine2.rawSql
+	end
 	class createEntityFromTable
 		Console.createEntitiesFromDb
 	end
@@ -679,9 +682,7 @@ module Doctrine2
 		$em = $this->getDoctrine()->getEntityManager();
 	    $sqlQuery = 'SELECT m.id, m.phone, GROUP_CONCAT(m.title) AS titles, GROUP_CONCAT(m.id) AS idlist FROM adverts AS m 
 					GROUP BY (m.phone)';
-		$statement = $em->getConnection()->prepare($sqlQuery);
-        $statement->execute();
-        return $statement->fetchAll();
+        return $em->getConnection()->executeQuery($sql, $params, $paramTypes)->fetchAllAssociative()
         
 /*  
 
