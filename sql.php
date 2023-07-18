@@ -313,3 +313,25 @@ function json_field() {
 function different_encoding_join() {
 	// ON CONVERT(ic.name USING utf8) = t.name
 }
+
+
+function loadDataFromFile()
+{
+	// SHOW VARIABLES LIKE "secure_file_priv";
+	
+	/**
+	 *  Variable_name 	    Value 	
+		secure_file_priv 	/var/lib/mysql-files/
+	 * 
+	 * */
+	 
+	 
+	$s = "LOAD DATA INFILE '/var/lib/mysql-files/file.csv' 
+INTO TABLE  _table
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n' 
+IGNORE 1 LINES;
+";
+
+}
