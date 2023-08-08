@@ -171,6 +171,14 @@ module Xubuntu
 		HandleLidSwitch=ignore
 
 	end
+	class Camera
+	   def disable
+	     #sudo modprobe -r uvcvideo
+	   end
+	   def enable
+	     #sudo modprobe uvcvideo
+	   end
+	end
 	class Date
 		def setMsk
 			sudo dpkg-reconfigure tzdata

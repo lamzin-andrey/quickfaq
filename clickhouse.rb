@@ -248,6 +248,7 @@ def replicationMergeTree
 #`quantity_items_in_payment` Int32 DEFAULT 0,
 #`payment_type` String,
 #`fee_amount` Decimal(10, 2),
+#`fee_amount2` Float64,
 #`source_pk` Int32,
 #`dt` Date
 #)
