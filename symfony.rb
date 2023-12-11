@@ -504,6 +504,12 @@ module Messengers
 		  ## config fragment
 		  #framework
 		    #messengers
+		    #serializer:
+			  #default_serializer: messenger.transport.symfony_serializer
+			#buses:
+			  #messenger.bus.default:
+				#middleware:
+					#- 'App\Component\Messenger\Middleware\ResetEntityManagersMiddleware'
 		      #transport
 		        #queue_name: '%env(MESSENGER_TRANSPORT_DSN)%/%rabbit_path%/%env(API_VERSION)%_queue_name'
 		        ############### in .env MESSENGER_TRANSPORT_DSN=amqp://user:*****@127.0.0.1:5672
