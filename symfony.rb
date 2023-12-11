@@ -499,6 +499,26 @@ module Messengers
 			#routing:
 			  #'App\Message\YourModule\NamedMessage': name_for_routing_section
 		end
+		
+		def simpleExample
+		  ## config fragment
+		  #framework
+		    #messengers
+		      #transport
+		        #queue_name: '%env(MESSENGER_TRANSPORT_DSN)%/%rabbit_path%/%env(API_VERSION)%_queue_name'
+		        ############### in .env MESSENGER_TRANSPORT_DSN=amqp://user:*****@127.0.0.1:5672
+		    ## ........................
+		      #routing
+		        #'App\Message\YourMessage': queue_name
+		         ############### YourMessage is DTO
+		   ## END config fragment
+		   
+		   
+		   #class YourMessageHandler implements MessageHandlerInterface
+		   # ....
+		   # public function __invoke(YourMessage $m){}
+		   
+		end
 	end
 end
 

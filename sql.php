@@ -326,12 +326,30 @@ function loadDataFromFile()
 	 * */
 	 
 	 
-	$s = "LOAD DATA INFILE '/var/lib/mysql-files/file.csv' 
+	/*$s = "LOAD DATA INFILE '/var/lib/mysql-files/file.csv' 
 INTO TABLE  _table
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"' 
 LINES TERMINATED BY '\n' 
 IGNORE 1 LINES;
-";
+";*/
+}
 
+function dashboard()
+{
+	
+	SELECT COUNT(DISTINCT r.id) AS cnt,
+       DATE(r.created_time) AS dt,
+       rtxt AS label
+FROM `table` AS r
+WHERE datediff(now(), r.created_time) <= 30
+  AND r.a = 1
+GROUP BY dt;
+
+ // Type Bar
+ // X dt
+ // Y cnt
+ // Group By Label
+ // Show legend True
+ // Treat missing/null values as 0  True;
 }
