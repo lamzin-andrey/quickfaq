@@ -263,3 +263,23 @@ def replicationMergeTree
 #)
 #ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/products_views', '{replica}')
 end
+
+def over
+  #Вот пример оконной функции в ClickHouse:
+
+	#SELECT
+	  #date,
+	  #product_id,
+	  #sales,
+	  #SUM(sales) OVER (PARTITION BY product_id ORDER BY date) AS running_total
+	#FROM sales_data;
+
+  #Здесь оконной функцией SUM вычисляется нарастающий итог продаж по каждому продукту, 
+   #сгруппированный по столбцу product_id.
+   #Фрейм окна задается с PARTITION BY product_id для разделения результирующего набора на партиции по product_id 
+    #и с ORDER BY date для указания, в каком порядке оконной функцией обрабатываются строки.
+   #Выводу оконной функции присваивается псевдоним running_total.
+
+   #В ClickHouse оконные функции используются не в WHERE и HAVING, а только в предложении SELECT запроса,
+     #а также с другими функциями, например агрегатными, для более сложного анализа данных.
+end
