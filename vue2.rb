@@ -1,3 +1,33 @@
+module Vuex
+	class vuexPlaces
+	    # Это проэктозависимо! (cb rf)
+		def mapGetters
+			# computed
+		end
+		def mapState
+			# computed
+		end
+		def mapActions
+			# methods
+		end
+		def mapMutations
+			# methods
+		end
+	end
+	def mapGetters
+		vuexPlaces.mapGetters
+	end
+	def mapMutations
+		vuexPlaces.mapMutations
+	end
+	def mapActions
+		vuexPlaces.mapActions
+	end
+	def mapState
+		vuexPlaces.mapState
+	end
+end 
+
 class Axios
 	def postJSON
 		#see post
