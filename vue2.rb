@@ -3,6 +3,7 @@ module Vuex
 	    # Это проэктозависимо! (cb rf)
 		def mapGetters
 			# computed
+			anyValue: "storeName/getterFunctionName",
 		end
 		def mapState
 			# computed
