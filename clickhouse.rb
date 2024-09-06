@@ -53,6 +53,15 @@ def drop
   # DROP TABLE foo
 end
 
+
+def update
+	#$sql = 'ALTER TABLE `active_android_users_daily_aggregate_data`
+				#UPDATE 
+					#`n` = :n
+				#WHERE 
+					#`date` = :date';
+end
+
 def delete
   # ALTER TABLE `foo` DELETE WHERE vehicle_plate IN (:plates)
 end
@@ -262,6 +271,10 @@ def replicationMergeTree
 #`product_category` UInt8
 #)
 #ENGINE = ReplicatedMergeTree('/clickhouse/tables/{cluster}/{shard}/default/products_views', '{replica}')
+end
+
+def addColumn
+ # ALTER TABLE marketing_push_osago_expired_month_concrete_stat ADD COLUMN unsubscribed_osago_users UInt32 LAST
 end
 
 def over
