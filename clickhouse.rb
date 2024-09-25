@@ -274,7 +274,8 @@ def replicationMergeTree
 end
 
 def addColumn
- # ALTER TABLE marketing_push_osago_expired_month_concrete_stat ADD COLUMN unsubscribed_osago_users UInt32 LAST
+ # ALTER TABLE t1 ADD COLUMN new_field_name UInt32 LAST
+ # ALTER TABLE t1  ADD COLUMN new_field_name UInt32 AFTER field_name
 end
 
 def over

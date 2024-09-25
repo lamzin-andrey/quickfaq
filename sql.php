@@ -353,3 +353,8 @@ GROUP BY dt;
  // Show legend True
  // Treat missing/null values as 0  True;
 }
+
+
+function convert() {
+	'CONVERT(t1.email USING utf8) = t2.email'
+}

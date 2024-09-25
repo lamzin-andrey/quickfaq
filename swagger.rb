@@ -62,5 +62,30 @@ module Examples
 			Path.GetWithArray
 		end
 	end
-	
+end
+
+module Refs
+	class parameterByRef
+		def linkParameterByRef
+			#/catalog/product/{productId}:
+			#get:
+			  #summary: Метод возвращает список продуктов
+			  #parameters:
+			    #- $ref: '#/components/parameters/ProductId'
+		end
+		
+		def PathParameterAsComponent
+		    ### See linkParameterByRef
+			#components:
+			  #parameters:
+			    ParameterName:
+				  name: parameterName
+				    in: path
+				    required: true
+				    schema:
+					  type: integer
+					  description: Описание
+					  example: 1234
+		end
+	end
 end
