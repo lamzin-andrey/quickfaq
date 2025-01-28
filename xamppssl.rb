@@ -50,11 +50,11 @@ module XamppSsl
 			#~ ErrorLog /opt/lampp/htdocs/test.loc/error.log
 			#~ CustomLog /opt/lampp/htdocs/test.loc/access.log common
 			
-			# Start Magick
+			## Start Magick
 			#~ SSLEngine on
 			#~ SSLCertificateFile "/opt/lampp/etc/ssl.crt/test.loc/test.locserver.crt"
 			#~ SSLCertificateKeyFile "/opt/lampp/etc/ssl.crt/test.loc/test.locserver.key"
-			# End Magick
+			## End Magick
 			
 		#~ </VirtualHost>
     end
