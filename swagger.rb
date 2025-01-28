@@ -64,13 +64,39 @@ module Examples
         
         def responseWithFile
             responses:
-				'200':
-				  description: Pdf файл полиса ОСАГО
-				  content:
-					application/pdf:
-					  schema:
-						type: string
-						format: binary
+                '200':
+                  description: Pdf файл
+                  content:
+                    application/pdf:
+                      schema:
+                        type: string
+                        format: binary
+                #multihead
+                '200':
+                  description: "Pdf или png файл или zip архив с целевым файлом и другими документами (чек, приложения, заявления, подпись, протокол, отпечатки пальцев. Конкретный состав может зависить от чего угодно, например от статьи). В случае типа png вернёт изображение полиса ОСАГО. Content-Type соответственно может меняться на application/zip или application/png"
+                  content:
+                    application/pdf:
+                      schema:
+                        type: string
+                        format: binary
+                    application/zip:
+                      schema:
+                        type: string
+                        format: binary
+                    application/png:
+                      schema:
+                        type: string
+                        format: binary
+        end
+        
+        def response302
+            '302':
+              description: Редирект на successUrl или failUrl
+              content:
+                text/html:
+                  schema:
+                    type: string
+                    format: text
         end
     end
 end

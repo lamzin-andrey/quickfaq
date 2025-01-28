@@ -7,7 +7,7 @@ end
 module ssh
 	class screen
 		#~ На примере переноса данных с лжного хоста на другой.
-		#~ screen -S move_api_data_2024-05
+		#~ screen -S move_api_data_2024-09
 		#~ Выйти:
 		#~ Вы можете легко выйти из screen - сессии набрав:
 		#~ Ctrl+a и d
