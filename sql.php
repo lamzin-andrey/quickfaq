@@ -358,3 +358,9 @@ GROUP BY dt;
 function convert() {
 	'CONVERT(t1.email USING utf8) = t2.email'
 }
+
+function insertFromSelect() {
+	'INSERT INTO table2 (name, location, gid)
+SELECT name, location, 1
+FROM   table1'
+}

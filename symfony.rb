@@ -603,6 +603,14 @@ module Entity
 		def updated_at
 			@see created_at
 		end
+	end # Datetime
+	
+	def decimal
+		#* @ORM\Column(name="price", type="decimal", precision=10, scale=2, nullable=true)
+	end
+	
+	def float
+		Entity.decimal
 	end
 end
 

@@ -58,6 +58,12 @@ class ConfigApp
 	
 end
 
+class Basic
+	def vfor
+		#v-for="(item, index) in dataField"
+	end
+end
+
 
 module Errors
 	class Chokodair
