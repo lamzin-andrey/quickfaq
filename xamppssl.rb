@@ -1,6 +1,65 @@
 module XamppSsl
   class Config
     def Alg
+        sudo /opt/lampp/lampp stop
+
+		#2 # Установка mkcert
+		sudo apt install libnss3-tools
+		curl -s https://api.github.com/repos/FiloSottile/mkcert/releases/latest \
+		  | grep browser_download_url.*linux-amd64 \
+		  | cut -d '"' -f 4 \
+		  | wget -qi -
+		mv mkcert-v*-linux-amd64 mkcert
+		chmod +x mkcert
+		sudo mv mkcert /usr/local/bin/
+
+		# Создаем локальный CA
+		mkcert -install
+
+		# Создаем сертификаты для сайтов
+		#mkcert localhost
+		#mkcert "localhost" "*.localhost" "site1.local" "site2.local"
+		#mkcert site1.local
+		#mkcert site2.local
+
+		# И даже так:
+		mkcert service.moneta.ru
+
+		# Сертификаты автоматически доверенные в системе и браузерах
+
+
+		3 В настройки хоста v-hosts добавляешь копию *80 узла с  *443
+
+		4 В узел 443 добавляешь:
+		```xml-hosts-file-syntaxsis
+		SSLEngine: on
+		SSLCertificateFile "/path/to/service.moneta.ru.pem"
+		SSLCertificateKeyFile "/path/to/service.moneta.ru-key.pem"
+		```
+
+		5 Копируем сертификаты в /opt/lampp/htdocs/site.lan/www/ssl (плохо, что в www но это локал, поэтому я не боюсь).
+
+		6  sudo mousepad /opt/lampp/etc/httpd.conf и раскомментируем строку
+		`Include etc/extra/httpd-ssl.conf`
+
+		7 тут внимательнее, чтобы путь у mkcert не сменился.
+		 
+
+		 # копируем оринальный сертификат lampp
+		 sudo cp /opt/lampp/share/curl/curl-ca-bundle.crt /etc/ssl/certs/combined-ca-bundle.crt
+		 # объединяем с ним серт mkcert
+		 cat /home/username/.local/share/mkcert/rootCA.pem | sudo tee -a /etc/ssl/certs/combined-ca-bundle.crt
+		 
+		 И в php.ini
+		 openssl.cafile=/etc/ssl/certs/combined-ca-bundle.crt
+
+		9 sudo /opt/lampp/lampp start
+
+
+		# И да, это заработало, даже для SOAP клиента!
+    end
+  
+    def AlgOld
 		#1 Create /home/User/tmp/04/cert.conf
 		certDotConf
 		#2 Put /home/User/tmp/04/genCert.sh
