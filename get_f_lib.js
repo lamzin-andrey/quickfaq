@@ -118,18 +118,22 @@ var Select = {
 }
 
 var OfflineTools = {
-	Notify: function (s) {
+	Notify: function (title, body, icon) {
 		//FF
 		if (window.Notification) {
-			function _notify(s) {
-				new Notification(s);
+			function _notify(title, body, icon) {
+				new Notification(title,  {
+body: body,
+image:icon,
+icon:icon
+});
 			}
 			if (Notification.permission === 'granted') {
-				_notify(s);
+				_notify(title, body, icon);
 			} else {
 				Notification.requestPermission(function(permission) {
 					if (permission === 'granted') {
-						_notify(s);
+						_notify(title, body, icon);
 					}
 				});
 			}

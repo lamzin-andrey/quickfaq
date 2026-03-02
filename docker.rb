@@ -33,9 +33,11 @@ def enterInContainerShell
 	#Тут почти всегда работает
 	
 	# [sudo] docker ps
-	# sudo docker run -it IMAGE_NAME bash
-	# sudo docker run -it forecatsservice_php bash
-	# IMAGE_NAME можно видеть в 3
+	# docker exec -it IMAGE_NAME bash
+	# sudo docker run -it firstsite-apache-1 bash
+	# Здесь важно: таблица обычно не помещается в экран и можно не понять, что столбец NAMES на самом деле крайний правый. 
+	#  Обычно NAME - это IMAGE с суффиксом, например с '-1'
+	# NAME можно видеть в 5 столбце (2025-03-02)
 	
 	# Но если контейнеру была нужна сборка (в файле docker-composer.yml есть строка build: ./docker/apache)
 	# вам возможно придётся использовать sh:
