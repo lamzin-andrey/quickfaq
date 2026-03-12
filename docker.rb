@@ -34,7 +34,7 @@ def enterInContainerShell
 	
 	# [sudo] docker ps
 	# docker exec -it IMAGE_NAME bash
-	# sudo docker run -it firstsite-apache-1 bash
+	# docker run -it firstsite-apache-1 bash
 	# Здесь важно: таблица обычно не помещается в экран и можно не понять, что столбец NAMES на самом деле крайний правый. 
 	#  Обычно NAME - это IMAGE с суффиксом, например с '-1'
 	# NAME можно видеть в 5 столбце (2025-03-02)
@@ -56,6 +56,8 @@ def runCommand
 	 # -- как выполнить команду в один клик или хотя бы через alias migrund?
 	 #   - Элементарно.
 	 #docker exec -it  rosfines-dev_backend4_105_1 php bin/console doctrine:migration:migrate
+	 #Если нужны батчи
+	 #docker exec -it  rosfines-dev_backend4_105_1 bash -c "cd site.loc/www; php bin/console doctrine:migration:migrate"
 	 #Уже в migrund.sh
 end
 
